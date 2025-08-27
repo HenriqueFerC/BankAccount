@@ -39,4 +39,7 @@ public class Endereco {
     @Column(name = "NUMERO", length = 6, nullable = false)
     private short numero;
 
+    @OneToOne
+    @JoinColumn(name = "ID_USER")
+    private User user;
 }

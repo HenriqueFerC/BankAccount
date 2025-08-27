@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Getter
 @Setter
@@ -31,4 +32,19 @@ public class Conta {
     @Enumerated(EnumType.STRING)
     @Column(name = "TIPO_CONTA", nullable = false)
     private TipoConta tipoConta;
+
+    @OneToOne
+    @JoinColumn(name = "ID_USER")
+    private User user;
+
+    @OneToMany(mappedBy = "conta", cascade = CascadeType.DETACH)
+    private List<Transacao> transacoes;
+
+    public void adicionarTransacao(Transacao transacao){
+        transacoes.add(transacao);
+    }
+
+    public void removerTransacao(Transacao transacao){
+        transacoes.remove(transacao);
+    }
 }

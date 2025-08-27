@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -32,4 +34,21 @@ public class User {
 
     @Column(name = "CPF_CNPJ", length = 14, nullable = false)
     private Long cpfCnpj;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private Endereco endereco;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Telefone> telefones;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.DETACH)
+    private Conta conta;
+
+    public void adicionarTelefone(Telefone telefone){
+        telefones.add(telefone);
+    }
+
+    public void removerTelefone(Telefone telefone){
+        telefones.remove(telefone);
+    }
 }

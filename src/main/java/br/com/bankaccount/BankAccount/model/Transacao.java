@@ -1,11 +1,20 @@
 package br.com.bankaccount.BankAccount.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 
 @Entity
 @Table(name = "TB_TRANSACAO")
@@ -28,4 +37,7 @@ public class Transacao {
     @Column(name = "VALOR", nullable = false)
     private BigDecimal valor;
 
+    @ManyToOne
+    @JoinColumn(name = "ID_CONTA")
+    private Conta conta;
 }
