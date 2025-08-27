@@ -1,5 +1,6 @@
 package br.com.bankaccount.BankAccount.model;
 
+import br.com.bankaccount.BankAccount.Dto.TransacaoDto.CadastrarTransacaoDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -40,4 +41,9 @@ public class Transacao {
     @ManyToOne
     @JoinColumn(name = "ID_CONTA")
     private Conta conta;
+
+    public Transacao(CadastrarTransacaoDto transacaoDto){
+        tipoTransacao = transacaoDto.tipoTransacao();
+        valor = transacaoDto.valor();
+    }
 }

@@ -1,5 +1,6 @@
 package br.com.bankaccount.BankAccount.model;
 
+import br.com.bankaccount.BankAccount.Dto.TelefoneDto.CadastrarTelefoneDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -24,9 +25,14 @@ public class Telefone {
     private short ddd;
 
     @Column(name = "NUMERO", length = 9, nullable = false)
-    private int telefone;
+    private int numero;
 
     @ManyToOne
     @JoinColumn(name = "ID_USER")
     private User user;
+
+    public Telefone(CadastrarTelefoneDto telefoneDto){
+        ddd = telefoneDto.ddd();
+        numero = telefoneDto.numero();
+    }
 }

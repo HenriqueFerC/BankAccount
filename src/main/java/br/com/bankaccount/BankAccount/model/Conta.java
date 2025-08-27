@@ -1,5 +1,6 @@
 package br.com.bankaccount.BankAccount.model;
 
+import br.com.bankaccount.BankAccount.Dto.ContaDto.CadastrarContaDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -46,5 +47,11 @@ public class Conta {
 
     public void removerTransacao(Transacao transacao){
         transacoes.remove(transacao);
+    }
+
+    public Conta(CadastrarContaDto contaDto){
+        numero = contaDto.numero();
+        saldo = contaDto.saldo();
+        tipoConta = contaDto.tipoConta();
     }
 }

@@ -1,5 +1,6 @@
 package br.com.bankaccount.BankAccount.model;
 
+import br.com.bankaccount.BankAccount.Dto.UserDto.CadastrarUserDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -50,5 +51,12 @@ public class User {
 
     public void removerTelefone(Telefone telefone){
         telefones.remove(telefone);
+    }
+
+    public User(CadastrarUserDto userDto){
+        nome = userDto.nome();
+        password = userDto.password();
+        userType = userDto.userType();
+        cpfCnpj = userDto.cpfCnpj();
     }
 }
