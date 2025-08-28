@@ -1,5 +1,7 @@
 package br.com.bankaccount.BankAccount.model;
 
+import com.fasterxml.jackson.annotation.JsonValue;
+
 public enum UserType {
     PF("Pessoa Física"), PJ("Pessoa Jurídica");
 
@@ -9,6 +11,7 @@ public enum UserType {
         this.label = label;
     }
 
+    @JsonValue
     public String getLabel(){
         return label;
     }

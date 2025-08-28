@@ -7,6 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.time.LocalDateTime;
 
-public interface TransacaoRepository extends JpaRepository<Long, Transacao> {
+public interface TransacaoRepository extends JpaRepository<Transacao, Long> {
     Page<Transacao> findByDataTransacaoBetween(LocalDateTime data1, LocalDateTime data2, Pageable pageable);
 }
