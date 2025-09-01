@@ -1,5 +1,6 @@
 package br.com.bankaccount.BankAccount.model;
 
+import br.com.bankaccount.BankAccount.Dto.UserDto.AtualizarUserDto;
 import br.com.bankaccount.BankAccount.Dto.UserDto.CadastrarUserDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -54,6 +55,13 @@ public class User {
     }
 
     public User(CadastrarUserDto userDto){
+        nome = userDto.nome();
+        password = userDto.password();
+        userType = userDto.userType();
+        cpfCnpj = userDto.cpfCnpj();
+    }
+
+    public void atualizarUser(AtualizarUserDto userDto){
         nome = userDto.nome();
         password = userDto.password();
         userType = userDto.userType();

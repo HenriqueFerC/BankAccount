@@ -1,16 +1,15 @@
 package br.com.bankaccount.BankAccount.Controller;
 
+import br.com.bankaccount.BankAccount.Dto.UserDto.AtualizarUserDto;
 import br.com.bankaccount.BankAccount.Dto.UserDto.CadastrarUserDto;
 import br.com.bankaccount.BankAccount.Dto.UserDto.DetalhesUserDto;
 import br.com.bankaccount.BankAccount.Repository.UserRepository;
 import br.com.bankaccount.BankAccount.model.User;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 @RestController
@@ -27,6 +26,29 @@ public class UserController {
         userRepository.save(usuario);
         var uri = uriBuilder.path("user/{id}").buildAndExpand(usuario.getId()).toUri();
         return ResponseEntity.created(uri).body(new DetalhesUserDto(usuario));
+    }
+
+    @GetMapping("{id}")
+    public ResponseEntity<DetalhesUserDto> buscarPorId(@PathVariable("id") Long id){
+        try {
+            var usuario = userRepository.getReferenceById(id);
+            return ResponseEntity.ok(new DetalhesUserDto(usuario));
+        } catch (EmptyResultDataAccessException e){
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @PutMapping("atualizar/{id}")
+    @Transactional
+    public ResponseEntity<DetalhesUserDto> atualizar(@PathVariable("id") Long id, @RequestBody AtualizarUserDto userDto){
+        try {
+            var usuario = userRepository.getReferenceById(id);
+            usuario.atualizarUser(userDto);
+            userRepository.save(usuario);
+            return ResponseEntity.ok(new DetalhesUserDto(usuario));
+        } catch (EmptyResultDataAccessException e){
+            return ResponseEntity.notFound().build();
+        }
     }
 
 }
