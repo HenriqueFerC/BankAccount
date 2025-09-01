@@ -1,5 +1,6 @@
 package br.com.bankaccount.BankAccount.model;
 
+import br.com.bankaccount.BankAccount.Dto.EnderecoDto.AtualizarEnderecoDto;
 import br.com.bankaccount.BankAccount.Dto.EnderecoDto.CadastrarEnderecoDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -44,7 +45,17 @@ public class Endereco {
     @JoinColumn(name = "ID_USER")
     private User user;
 
-    public Endereco(CadastrarEnderecoDto enderecoDto){
+    public Endereco(CadastrarEnderecoDto enderecoDto, User user){
+        estado = enderecoDto.estado();
+        cidade = enderecoDto.cidade();
+        bairro = enderecoDto.bairro();
+        cep = enderecoDto.cep();
+        logradouro = enderecoDto.logradouro();
+        numero = enderecoDto.numero();
+        this.user = user;
+    }
+
+    public void atualizarEndereco(AtualizarEnderecoDto enderecoDto){
         estado = enderecoDto.estado();
         cidade = enderecoDto.cidade();
         bairro = enderecoDto.bairro();
