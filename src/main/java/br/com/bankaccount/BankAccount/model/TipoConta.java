@@ -1,5 +1,7 @@
 package br.com.bankaccount.BankAccount.model;
 
+import com.fasterxml.jackson.annotation.JsonValue;
+
 public enum TipoConta {
     CC("Conta Corrente"),
     CP("Conta Poupança"),
@@ -11,6 +13,7 @@ public enum TipoConta {
         this.label = label;
     }
 
+    @JsonValue
     public String getLabel(){
         return label;
     }

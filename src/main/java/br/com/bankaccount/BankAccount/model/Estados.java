@@ -1,5 +1,7 @@
 package br.com.bankaccount.BankAccount.model;
 
+import com.fasterxml.jackson.annotation.JsonValue;
+
 public enum Estados {
     AC("Acre"),
     AL("Alagoas"),
@@ -35,6 +37,7 @@ public enum Estados {
         this.label = label;
     }
 
+    @JsonValue
     public String getLabel(){
         return label;
     }

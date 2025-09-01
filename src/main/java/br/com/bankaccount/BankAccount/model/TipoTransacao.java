@@ -1,5 +1,7 @@
 package br.com.bankaccount.BankAccount.model;
 
+import com.fasterxml.jackson.annotation.JsonValue;
+
 public enum TipoTransacao {
     SAQUE("Saque"), DEPÓSITO("Depósito"), TRANSFERÊNCIA("Transferência"), PIX("Pix"), CARTÃO("Cartão");
 
@@ -9,6 +11,7 @@ public enum TipoTransacao {
         this.label = label;
     }
 
+    @JsonValue
     private String getLabel(){
         return label;
     }

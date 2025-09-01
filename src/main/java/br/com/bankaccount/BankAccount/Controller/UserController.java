@@ -1,5 +1,6 @@
 package br.com.bankaccount.BankAccount.Controller;
 
+import br.com.bankaccount.BankAccount.Dto.ContaDto.AtualizarContaDto;
 import br.com.bankaccount.BankAccount.Dto.ContaDto.CadastrarContaDto;
 import br.com.bankaccount.BankAccount.Dto.ContaDto.DetalhesContaDto;
 import br.com.bankaccount.BankAccount.Dto.UserDto.AtualizarUserDto;
@@ -10,7 +11,6 @@ import br.com.bankaccount.BankAccount.Repository.UserRepository;
 import br.com.bankaccount.BankAccount.model.Conta;
 import br.com.bankaccount.BankAccount.model.User;
 import jakarta.transaction.Transactional;
-import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Pageable;
@@ -82,7 +82,7 @@ public class UserController {
         }
     }
 
-    //Métodos para criação de Conta Corrente abaixo
+    //Métodos para criação e alteração de Conta Corrente abaixo
     @PostMapping("cadastrarConta/{id}")
     @Transactional
     public ResponseEntity<DetalhesContaDto> cadastrarConta(@PathVariable("id") Long id, @RequestBody CadastrarContaDto contaDto, UriComponentsBuilder uriBuilder){
@@ -96,4 +96,19 @@ public class UserController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    @PutMapping("atualizarConta/{id}")
+    @Transactional
+    public ResponseEntity<DetalhesContaDto> atualizarConta(@PathVariable("id") Long id, @RequestBody AtualizarContaDto contaDto){
+        try {
+            var conta = contaRepository.getReferenceById(id);
+            conta.atualizarConta(contaDto);
+            contaRepository.save(conta);
+            return ResponseEntity.ok(new DetalhesContaDto(conta));
+        } catch (EmptyResultDataAccessException e){
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    //
 }

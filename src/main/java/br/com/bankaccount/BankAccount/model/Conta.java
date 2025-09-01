@@ -1,5 +1,6 @@
 package br.com.bankaccount.BankAccount.model;
 
+import br.com.bankaccount.BankAccount.Dto.ContaDto.AtualizarContaDto;
 import br.com.bankaccount.BankAccount.Dto.ContaDto.CadastrarContaDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -54,5 +55,9 @@ public class Conta {
         saldo = contaDto.saldo();
         tipoConta = contaDto.tipoConta();
         this.user = user;
+    }
+
+    public void atualizarConta(AtualizarContaDto contaDto){
+        tipoConta = contaDto.tipoConta();
     }
 }
