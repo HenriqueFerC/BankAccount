@@ -1,9 +1,13 @@
 package br.com.bankaccount.BankAccount.Controller;
 
+import br.com.bankaccount.BankAccount.Dto.ContaDto.CadastrarContaDto;
+import br.com.bankaccount.BankAccount.Dto.ContaDto.DetalhesContaDto;
 import br.com.bankaccount.BankAccount.Dto.UserDto.AtualizarUserDto;
 import br.com.bankaccount.BankAccount.Dto.UserDto.CadastrarUserDto;
 import br.com.bankaccount.BankAccount.Dto.UserDto.DetalhesUserDto;
+import br.com.bankaccount.BankAccount.Repository.ContaRepository;
 import br.com.bankaccount.BankAccount.Repository.UserRepository;
+import br.com.bankaccount.BankAccount.model.Conta;
 import br.com.bankaccount.BankAccount.model.User;
 import jakarta.transaction.Transactional;
 import org.apache.coyote.Response;
@@ -22,6 +26,9 @@ public class UserController {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private ContaRepository contaRepository;
 
     @PostMapping("cadastrar")
     @Transactional
@@ -70,6 +77,21 @@ public class UserController {
         try {
             userRepository.deleteById(id);
             return ResponseEntity.noContent().build();
+        } catch (EmptyResultDataAccessException e){
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    //Métodos para criação de Conta Corrente abaixo
+    @PostMapping("cadastrarConta/{id}")
+    @Transactional
+    public ResponseEntity<DetalhesContaDto> cadastrarConta(@PathVariable("id") Long id, @RequestBody CadastrarContaDto contaDto, UriComponentsBuilder uriBuilder){
+        try {
+            var usuario = userRepository.getReferenceById(id);
+            var conta = new Conta(contaDto, usuario);
+            contaRepository.save(conta);
+            var uri = uriBuilder.path("conta/{id}").buildAndExpand(conta.getId()).toUri();
+            return ResponseEntity.created(uri).body(new DetalhesContaDto(conta));
         } catch (EmptyResultDataAccessException e){
             return ResponseEntity.notFound().build();
         }

@@ -25,7 +25,7 @@ public class Conta {
     private Long id;
 
     @Column(name = "NUMERO", length = 6, nullable = false)
-    private short numero;
+    private int numero;
 
     @Column(name = "SALDO", nullable = false)
     private BigDecimal saldo;
@@ -49,9 +49,10 @@ public class Conta {
         transacoes.remove(transacao);
     }
 
-    public Conta(CadastrarContaDto contaDto){
+    public Conta(CadastrarContaDto contaDto, User user){
         numero = contaDto.numero();
         saldo = contaDto.saldo();
         tipoConta = contaDto.tipoConta();
+        this.user = user;
     }
 }

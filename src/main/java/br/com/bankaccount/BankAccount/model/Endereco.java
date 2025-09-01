@@ -37,7 +37,7 @@ public class Endereco {
     @Column(name = "LOGRADOURO", length = 30, nullable = false)
     private String logradouro;
 
-    @Column(name = "NUMERO", length = 6, nullable = false)
+    @Column(name = "NUMERO", length = 5, nullable = false)
     private short numero;
 
     @OneToOne

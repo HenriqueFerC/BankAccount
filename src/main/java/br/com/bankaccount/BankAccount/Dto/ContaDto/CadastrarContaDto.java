@@ -7,7 +7,7 @@ import br.com.bankaccount.BankAccount.model.TipoConta;
 import java.math.BigDecimal;
 
 public record CadastrarContaDto(
-        short numero,
+        int numero,
         BigDecimal saldo,
         TipoConta tipoConta
     ) {

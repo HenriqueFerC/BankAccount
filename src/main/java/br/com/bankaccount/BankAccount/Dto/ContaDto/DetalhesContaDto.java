@@ -4,7 +4,7 @@ import br.com.bankaccount.BankAccount.Dto.UserDto.DetalhesUserDto;
 import br.com.bankaccount.BankAccount.model.Conta;
 import br.com.bankaccount.BankAccount.model.TipoConta;
 
-public record DetalhesContaDto(short numero, TipoConta tipoConta, DetalhesUserDto userDto) {
+public record DetalhesContaDto(int numero, TipoConta tipoConta, DetalhesUserDto userDto) {
     public DetalhesContaDto(Conta conta){
         this(conta.getNumero(), conta.getTipoConta(), new DetalhesUserDto(conta.getUser()));
     }
