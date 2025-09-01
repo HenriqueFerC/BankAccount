@@ -6,11 +6,15 @@ import br.com.bankaccount.BankAccount.Dto.UserDto.DetalhesUserDto;
 import br.com.bankaccount.BankAccount.Repository.UserRepository;
 import br.com.bankaccount.BankAccount.model.User;
 import jakarta.transaction.Transactional;
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("user")
@@ -38,6 +42,15 @@ public class UserController {
         }
     }
 
+    @GetMapping("listar")
+    public ResponseEntity<List<DetalhesUserDto>> listarUsuarios(Pageable pageable){
+        var lista = userRepository.findAll(pageable).stream().map(DetalhesUserDto::new).toList();
+        if(lista.isEmpty()){
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(lista);
+    }
+
     @PutMapping("atualizar/{id}")
     @Transactional
     public ResponseEntity<DetalhesUserDto> atualizar(@PathVariable("id") Long id, @RequestBody AtualizarUserDto userDto){
@@ -51,4 +64,14 @@ public class UserController {
         }
     }
 
+    @DeleteMapping("excluir/{id}")
+    @Transactional
+    public ResponseEntity<Void> excluirUsuario(@PathVariable("id") Long id){
+        try {
+            userRepository.deleteById(id);
+            return ResponseEntity.noContent().build();
+        } catch (EmptyResultDataAccessException e){
+            return ResponseEntity.notFound().build();
+        }
+    }
 }
