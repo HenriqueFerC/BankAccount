@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -25,7 +26,7 @@ public class Conta {
     @Column(name = "ID_CONTA")
     private Long id;
 
-    @Column(name = "NUMERO", length = 6, nullable = false)
+    @Column(name = "NUMERO", length = 6, nullable = false, unique = true)
     private int numero;
 
     @Column(name = "SALDO", nullable = false)
@@ -39,15 +40,11 @@ public class Conta {
     @JoinColumn(name = "ID_USER")
     private User user;
 
-    @OneToMany(mappedBy = "conta", cascade = CascadeType.DETACH)
-    private List<Transacao> transacoes;
+    @ManyToMany(mappedBy = "contas", cascade = CascadeType.DETACH)
+    private List<Transacao> transacoes = new ArrayList<>();;
 
     public void adicionarTransacao(Transacao transacao){
         transacoes.add(transacao);
-    }
-
-    public void removerTransacao(Transacao transacao){
-        transacoes.remove(transacao);
     }
 
     public Conta(CadastrarContaDto contaDto, User user){
@@ -59,5 +56,12 @@ public class Conta {
 
     public void atualizarConta(AtualizarContaDto contaDto){
         tipoConta = contaDto.tipoConta();
+    }
+
+    public void transacao(Conta conta1, Conta conta2, BigDecimal valor){
+        var valor2 = conta2.getSaldo().add(valor);
+        var valor1 = conta1.getSaldo().subtract(valor);
+        conta1.setSaldo(valor1);
+        conta2.setSaldo(valor2);
     }
 }

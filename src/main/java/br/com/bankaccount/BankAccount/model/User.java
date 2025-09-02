@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -34,14 +35,14 @@ public class User {
     @Column(name = "USER_TYPE", nullable = false)
     private UserType userType;
 
-    @Column(name = "CPF_CNPJ", length = 14, nullable = false)
+    @Column(name = "CPF_CNPJ", length = 14, nullable = false, unique = true)
     private Long cpfCnpj;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private Endereco endereco;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<Telefone> telefones;
+    private List<Telefone> telefones = new ArrayList<>();;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.DETACH)
     private Conta conta;

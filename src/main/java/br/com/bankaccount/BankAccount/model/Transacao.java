@@ -11,6 +11,8 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -38,9 +40,17 @@ public class Transacao {
     @Column(name = "VALOR", nullable = false)
     private BigDecimal valor;
 
-    @ManyToOne
-    @JoinColumn(name = "ID_CONTA")
-    private Conta conta;
+    @ManyToMany
+    @JoinTable(
+            name = "Conta_Transacao",
+            joinColumns = @JoinColumn(name = "ID_TRANSACAO"),
+            inverseJoinColumns = @JoinColumn(name = "ID_CONTA")
+    )
+    private List<Conta> contas = new ArrayList<>();;
+
+    public void adicionarConta(Conta conta){
+        contas.add(conta);
+    }
 
     public Transacao(CadastrarTransacaoDto transacaoDto){
         tipoTransacao = transacaoDto.tipoTransacao();

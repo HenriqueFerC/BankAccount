@@ -6,14 +6,18 @@ import br.com.bankaccount.BankAccount.Dto.ContaDto.DetalhesContaDto;
 import br.com.bankaccount.BankAccount.Dto.EnderecoDto.AtualizarEnderecoDto;
 import br.com.bankaccount.BankAccount.Dto.EnderecoDto.CadastrarEnderecoDto;
 import br.com.bankaccount.BankAccount.Dto.EnderecoDto.DetalhesEnderecoDto;
+import br.com.bankaccount.BankAccount.Dto.TransacaoDto.CadastrarTransacaoDto;
+import br.com.bankaccount.BankAccount.Dto.TransacaoDto.DetalhesTransacaoDto;
 import br.com.bankaccount.BankAccount.Dto.UserDto.AtualizarUserDto;
 import br.com.bankaccount.BankAccount.Dto.UserDto.CadastrarUserDto;
 import br.com.bankaccount.BankAccount.Dto.UserDto.DetalhesUserDto;
 import br.com.bankaccount.BankAccount.Repository.ContaRepository;
 import br.com.bankaccount.BankAccount.Repository.EnderecoRepository;
+import br.com.bankaccount.BankAccount.Repository.TransacaoRepository;
 import br.com.bankaccount.BankAccount.Repository.UserRepository;
 import br.com.bankaccount.BankAccount.model.Conta;
 import br.com.bankaccount.BankAccount.model.Endereco;
+import br.com.bankaccount.BankAccount.model.Transacao;
 import br.com.bankaccount.BankAccount.model.User;
 import jakarta.transaction.Transactional;
 import org.apache.coyote.Response;
@@ -38,6 +42,9 @@ public class UserController {
 
     @Autowired
     private EnderecoRepository enderecoRepository;
+
+    @Autowired
+    private TransacaoRepository transacaoRepository;
 
     @PostMapping("cadastrar")
     @Transactional
@@ -156,6 +163,31 @@ public class UserController {
         try {
             enderecoRepository.deleteById(id);
             return ResponseEntity.noContent().build();
+        } catch (EmptyResultDataAccessException e){
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    //Método de transação de Conta
+    @PostMapping("realizarTransacao/{idRemetente}/{idDestinatario}")
+    @Transactional
+    public ResponseEntity<DetalhesTransacaoDto> transacao(@PathVariable("idRemetente") Long id, @PathVariable("idDestinatario") Long id2, @RequestBody CadastrarTransacaoDto transacaoDto, UriComponentsBuilder uriBuilder){
+        try {
+            var conta1 = contaRepository.getReferenceById(id);
+            var conta2 = contaRepository.getReferenceById(id2);
+
+            if(conta1.getSaldo().compareTo(transacaoDto.valor()) < 0){
+                return ResponseEntity.badRequest().build();
+            }
+
+            conta1.transacao(conta1, conta2, transacaoDto.valor());
+            var transacao = new Transacao(transacaoDto);
+            transacao.adicionarConta(conta1);
+            conta1.adicionarTransacao(transacao);
+            conta2.adicionarTransacao(transacao);
+            transacaoRepository.save(transacao);
+            var uri = uriBuilder.path("transacao/{id}").buildAndExpand(transacao.getId()).toUri();
+            return ResponseEntity.created(uri).body(new DetalhesTransacaoDto(transacao));
         } catch (EmptyResultDataAccessException e){
             return ResponseEntity.notFound().build();
         }
