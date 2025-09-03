@@ -7,6 +7,7 @@ import br.com.bankaccount.BankAccount.Dto.TransacaoDto.DetalhesTransacaoDto;
 import br.com.bankaccount.BankAccount.Repository.ContaRepository;
 import br.com.bankaccount.BankAccount.Repository.TransacaoRepository;
 import br.com.bankaccount.BankAccount.model.Transacao;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -17,6 +18,8 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 @RestController
 @RequestMapping("conta")
+@Tag(name = "conta", description = "API do modelo Conta Bancária, métodos Atualizar, Buscar." +
+        " Método para realizar transação com relacionamento Muitos para Muitos")
 public class ContaController {
 
     @Autowired

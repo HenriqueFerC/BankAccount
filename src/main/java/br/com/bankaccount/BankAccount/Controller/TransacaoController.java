@@ -2,6 +2,7 @@ package br.com.bankaccount.BankAccount.Controller;
 
 import br.com.bankaccount.BankAccount.Dto.TransacaoDto.DetalhesTransacaoDto;
 import br.com.bankaccount.BankAccount.Repository.TransacaoRepository;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,6 +17,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("transacao")
+@Tag(name = "transacao", description = "API do modelo transação, métodos Buscar Todos e Buscar por Data")
 public class TransacaoController {
 
     @Autowired

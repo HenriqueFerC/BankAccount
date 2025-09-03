@@ -1,9 +1,7 @@
 package br.com.bankaccount.BankAccount.Controller;
 
-import br.com.bankaccount.BankAccount.Dto.ContaDto.AtualizarContaDto;
 import br.com.bankaccount.BankAccount.Dto.ContaDto.CadastrarContaDto;
 import br.com.bankaccount.BankAccount.Dto.ContaDto.DetalhesContaDto;
-import br.com.bankaccount.BankAccount.Dto.EnderecoDto.AtualizarEnderecoDto;
 import br.com.bankaccount.BankAccount.Dto.EnderecoDto.CadastrarEnderecoDto;
 import br.com.bankaccount.BankAccount.Dto.EnderecoDto.DetalhesEnderecoDto;
 import br.com.bankaccount.BankAccount.Dto.TelefoneDto.CadastrarTelefoneDto;
@@ -19,6 +17,7 @@ import br.com.bankaccount.BankAccount.model.Conta;
 import br.com.bankaccount.BankAccount.model.Endereco;
 import br.com.bankaccount.BankAccount.model.Telefone;
 import br.com.bankaccount.BankAccount.model.User;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -31,6 +30,8 @@ import java.util.List;
 
 @RestController
 @RequestMapping("user")
+@Tag(name = "user", description = "API do modelo Usuário, métodos de Buscar, Cadastrar, Atualizar, Listar, Excluir." +
+        " Métodos para Cadastrar telefone, conta e endereço já relacionado à classe user")
 public class UserController {
 
     @Autowired

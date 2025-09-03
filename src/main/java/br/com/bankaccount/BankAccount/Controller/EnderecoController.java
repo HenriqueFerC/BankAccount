@@ -3,6 +3,7 @@ package br.com.bankaccount.BankAccount.Controller;
 import br.com.bankaccount.BankAccount.Dto.EnderecoDto.AtualizarEnderecoDto;
 import br.com.bankaccount.BankAccount.Dto.EnderecoDto.DetalhesEnderecoDto;
 import br.com.bankaccount.BankAccount.Repository.EnderecoRepository;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("endereco")
+@Tag(name = "endereco", description = "API do modelo Endereço, métodos Buscar, Atualizar, Excluir")
 public class EnderecoController {
 
     @Autowired
