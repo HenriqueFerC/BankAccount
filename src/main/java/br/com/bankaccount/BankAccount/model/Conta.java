@@ -41,7 +41,7 @@ public class Conta {
     private User user;
 
     @ManyToMany(mappedBy = "contas", cascade = CascadeType.DETACH)
-    private List<Transacao> transacoes = new ArrayList<>();;
+    private List<Transacao> transacoes = new ArrayList<>();
 
     public void adicionarTransacao(Transacao transacao){
         transacoes.add(transacao);

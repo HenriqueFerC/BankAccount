@@ -6,21 +6,20 @@ import br.com.bankaccount.BankAccount.Dto.ContaDto.DetalhesContaDto;
 import br.com.bankaccount.BankAccount.Dto.EnderecoDto.AtualizarEnderecoDto;
 import br.com.bankaccount.BankAccount.Dto.EnderecoDto.CadastrarEnderecoDto;
 import br.com.bankaccount.BankAccount.Dto.EnderecoDto.DetalhesEnderecoDto;
-import br.com.bankaccount.BankAccount.Dto.TransacaoDto.CadastrarTransacaoDto;
-import br.com.bankaccount.BankAccount.Dto.TransacaoDto.DetalhesTransacaoDto;
+import br.com.bankaccount.BankAccount.Dto.TelefoneDto.CadastrarTelefoneDto;
+import br.com.bankaccount.BankAccount.Dto.TelefoneDto.DetalhesTelefoneDto;
 import br.com.bankaccount.BankAccount.Dto.UserDto.AtualizarUserDto;
 import br.com.bankaccount.BankAccount.Dto.UserDto.CadastrarUserDto;
 import br.com.bankaccount.BankAccount.Dto.UserDto.DetalhesUserDto;
 import br.com.bankaccount.BankAccount.Repository.ContaRepository;
 import br.com.bankaccount.BankAccount.Repository.EnderecoRepository;
-import br.com.bankaccount.BankAccount.Repository.TransacaoRepository;
+import br.com.bankaccount.BankAccount.Repository.TelefoneRepository;
 import br.com.bankaccount.BankAccount.Repository.UserRepository;
 import br.com.bankaccount.BankAccount.model.Conta;
 import br.com.bankaccount.BankAccount.model.Endereco;
-import br.com.bankaccount.BankAccount.model.Transacao;
+import br.com.bankaccount.BankAccount.model.Telefone;
 import br.com.bankaccount.BankAccount.model.User;
 import jakarta.transaction.Transactional;
-import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Pageable;
@@ -44,7 +43,7 @@ public class UserController {
     private EnderecoRepository enderecoRepository;
 
     @Autowired
-    private TransacaoRepository transacaoRepository;
+    private TelefoneRepository telefoneRepository;
 
     @PostMapping("cadastrar")
     @Transactional
@@ -98,7 +97,7 @@ public class UserController {
         }
     }
 
-    //Métodos para criação e alteração de Conta Corrente abaixo
+    //Método para criação de Conta Corrente abaixo
 
     @PostMapping("cadastrarConta/{id}")
     @Transactional
@@ -115,20 +114,7 @@ public class UserController {
         }
     }
 
-    @PutMapping("atualizarConta/{id}")
-    @Transactional
-    public ResponseEntity<DetalhesContaDto> atualizarConta(@PathVariable("id") Long id, @RequestBody AtualizarContaDto contaDto){
-        try {
-            var conta = contaRepository.getReferenceById(id);
-            conta.atualizarConta(contaDto);
-            contaRepository.save(conta);
-            return ResponseEntity.ok(new DetalhesContaDto(conta));
-        } catch (EmptyResultDataAccessException e){
-            return ResponseEntity.notFound().build();
-        }
-    }
-
-    //Métodos para criação, alteração e remoção de Endereco abaixo
+    //Método para criação de Endereco abaixo
 
     @PostMapping("cadastrarEndereco/{id}")
     @Transactional
@@ -145,51 +131,22 @@ public class UserController {
         }
     }
 
-    @PutMapping("atualizarEndereco/{id}")
+
+    //Método para criação de Telefone abaixo
+
+    @PostMapping("cadastrarTelefone/{id}")
     @Transactional
-    public ResponseEntity<DetalhesEnderecoDto> atualizarEndereco(@PathVariable("id") Long id, @RequestBody AtualizarEnderecoDto enderecoDto){
+    public ResponseEntity<DetalhesTelefoneDto> cadastrarTelefone(@PathVariable("id") Long id, @RequestBody CadastrarTelefoneDto telefoneDto, UriComponentsBuilder uriBuilder){
         try {
-            var endereco = enderecoRepository.getReferenceById(id);
-            endereco.atualizarEndereco(enderecoDto);
-            return ResponseEntity.ok(new DetalhesEnderecoDto(endereco));
+            var usuario = userRepository.getReferenceById(id);
+            var telefone = new Telefone(telefoneDto);
+            usuario.adicionarTelefone(telefone);
+            telefoneRepository.save(telefone);
+            var uri = uriBuilder.path("telefone/{id}").buildAndExpand(telefone.getId()).toUri();
+            return ResponseEntity.created(uri).body(new DetalhesTelefoneDto(telefone));
         } catch (EmptyResultDataAccessException e){
             return ResponseEntity.notFound().build();
         }
     }
 
-    @DeleteMapping("excluirEndereco/{id}")
-    @Transactional
-    public ResponseEntity<Void> excluirEndereco(@PathVariable("id") Long id){
-        try {
-            enderecoRepository.deleteById(id);
-            return ResponseEntity.noContent().build();
-        } catch (EmptyResultDataAccessException e){
-            return ResponseEntity.notFound().build();
-        }
-    }
-
-    //Método de transação de Conta
-    @PostMapping("realizarTransacao/{idRemetente}/{idDestinatario}")
-    @Transactional
-    public ResponseEntity<DetalhesTransacaoDto> transacao(@PathVariable("idRemetente") Long id, @PathVariable("idDestinatario") Long id2, @RequestBody CadastrarTransacaoDto transacaoDto, UriComponentsBuilder uriBuilder){
-        try {
-            var conta1 = contaRepository.getReferenceById(id);
-            var conta2 = contaRepository.getReferenceById(id2);
-
-            if(conta1.getSaldo().compareTo(transacaoDto.valor()) < 0){
-                return ResponseEntity.badRequest().build();
-            }
-
-            conta1.transacao(conta1, conta2, transacaoDto.valor());
-            var transacao = new Transacao(transacaoDto);
-            transacao.adicionarConta(conta1);
-            conta1.adicionarTransacao(transacao);
-            conta2.adicionarTransacao(transacao);
-            transacaoRepository.save(transacao);
-            var uri = uriBuilder.path("transacao/{id}").buildAndExpand(transacao.getId()).toUri();
-            return ResponseEntity.created(uri).body(new DetalhesTransacaoDto(transacao));
-        } catch (EmptyResultDataAccessException e){
-            return ResponseEntity.notFound().build();
-        }
-    }
 }

@@ -1,5 +1,6 @@
 package br.com.bankaccount.BankAccount.model;
 
+import br.com.bankaccount.BankAccount.Dto.TelefoneDto.AtualizarTelefoneDto;
 import br.com.bankaccount.BankAccount.Dto.TelefoneDto.CadastrarTelefoneDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -32,6 +33,11 @@ public class Telefone {
     private User user;
 
     public Telefone(CadastrarTelefoneDto telefoneDto){
+        ddd = telefoneDto.ddd();
+        numero = telefoneDto.numero();
+    }
+
+    public void atualizarTelefone(AtualizarTelefoneDto telefoneDto){
         ddd = telefoneDto.ddd();
         numero = telefoneDto.numero();
     }
