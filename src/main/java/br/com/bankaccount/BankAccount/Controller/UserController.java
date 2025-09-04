@@ -17,6 +17,11 @@ import br.com.bankaccount.BankAccount.model.Conta;
 import br.com.bankaccount.BankAccount.model.Endereco;
 import br.com.bankaccount.BankAccount.model.Telefone;
 import br.com.bankaccount.BankAccount.model.User;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,6 +53,13 @@ public class UserController {
 
     @PostMapping("cadastrar")
     @Transactional
+    @Operation(summary = "Cadastrar Usuário", description = "Cadastra o Usuário com base no JSON enviado para a URL.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", description = "Usuário cadastrado com sucesso!",
+            content = @Content(schema = @Schema(implementation = DetalhesContaDto.class), mediaType = "application/json")),
+            @ApiResponse(responseCode = "404", description = "Formato do Json incorreto."),
+            @ApiResponse(responseCode = "500", description = "Erro de servidor.")
+    })
     public ResponseEntity<DetalhesUserDto> cadastrar(@RequestBody CadastrarUserDto userDto, UriComponentsBuilder uriBuilder){
         var usuario = new User(userDto);
         userRepository.save(usuario);
@@ -56,6 +68,13 @@ public class UserController {
     }
 
     @GetMapping("{id}")
+    @Operation(summary = "Buscar Usuário por ID", description = "Busca o usuário com base no ID da URL.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Usuário buscado com sucesso!",
+            content = @Content(schema = @Schema(implementation = DetalhesUserDto.class), mediaType = "application/json")),
+            @ApiResponse(responseCode = "404", description = "Usuário não encontrado. ID incorreto."),
+            @ApiResponse(responseCode = "500", description = "Erro de servidor.")
+    })
     public ResponseEntity<DetalhesUserDto> buscarPorId(@PathVariable("id") Long id){
         try {
             var usuario = userRepository.getReferenceById(id);
@@ -66,6 +85,13 @@ public class UserController {
     }
 
     @GetMapping("listar")
+    @Operation(summary = "Listar Usuários", description = "Lista os usuários do banco de dados.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Lista de Usuários buscada com sucesso!",
+            content = @Content(schema = @Schema(implementation = DetalhesUserDto.class), mediaType = "application/json")),
+            @ApiResponse(responseCode = "404", description = "Nenhum usuário foi encontrado."),
+            @ApiResponse(responseCode = "500", description = "Erro de servidor.")
+    })
     public ResponseEntity<List<DetalhesUserDto>> listarUsuarios(Pageable pageable){
         var lista = userRepository.findAll(pageable).stream().map(DetalhesUserDto::new).toList();
         if(lista.isEmpty()){
@@ -76,6 +102,13 @@ public class UserController {
 
     @PutMapping("atualizar/{id}")
     @Transactional
+    @Operation(summary = "Atualizar Usuário", description = "Atualiza o Usuário com base no ID da URL.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Usuário atualizado com sucesso!",
+            content = @Content(schema = @Schema(implementation = DetalhesUserDto.class), mediaType = "application/json")),
+            @ApiResponse(responseCode = "404", description = "Usuário não encontrado ou formato Json incorreto."),
+            @ApiResponse(responseCode = "500", description = "Erro de servidor.")
+    })
     public ResponseEntity<DetalhesUserDto> atualizar(@PathVariable("id") Long id, @RequestBody AtualizarUserDto userDto){
         try {
             var usuario = userRepository.getReferenceById(id);
@@ -89,6 +122,12 @@ public class UserController {
 
     @DeleteMapping("excluir/{id}")
     @Transactional
+    @Operation(summary = "Excluir Usuário", description = "Exclui o Usuário e todos seus relacionados (Cascade) com base no ID da URL.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "Usuário excluído com sucesso!"),
+            @ApiResponse(responseCode = "404", description = "Usuário não encontrado. ID incorreto."),
+            @ApiResponse(responseCode = "500", description = "Erro de servidor.")
+    })
     public ResponseEntity<Void> excluirUsuario(@PathVariable("id") Long id){
         try {
             userRepository.deleteById(id);
@@ -102,6 +141,13 @@ public class UserController {
 
     @PostMapping("cadastrarConta/{id}")
     @Transactional
+    @Operation(summary = "Cadastrar Conta", description = "Cadastra a Conta com base no ID do usuário, já relacionando-os.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", description = "Conta criada com sucesso",
+            content = @Content(schema = @Schema(implementation = DetalhesContaDto.class), mediaType = "application/json")),
+            @ApiResponse(responseCode = "404", description = "Usuário não encontrado ou formato Json incorreto"),
+            @ApiResponse(responseCode = "500", description = "Erro de servidor.")
+    })
     public ResponseEntity<DetalhesContaDto> cadastrarConta(@PathVariable("id") Long id, @RequestBody CadastrarContaDto contaDto, UriComponentsBuilder uriBuilder){
         try {
             var usuario = userRepository.getReferenceById(id);
@@ -119,6 +165,13 @@ public class UserController {
 
     @PostMapping("cadastrarEndereco/{id}")
     @Transactional
+    @Operation(summary = "Cadastrar Endereço", description = "Cadastra o Endereço com base no ID do Usuário, já relacionando-os.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", description = "Endereço cadastrado com sucesso!",
+            content = @Content(schema = @Schema(implementation = DetalhesEnderecoDto.class), mediaType = "application/json")),
+            @ApiResponse(responseCode = "404", description = "Usuário não encontrado ou formato Json incorreto."),
+            @ApiResponse(responseCode = "500", description = "Erro de servidor.")
+    })
     public ResponseEntity<DetalhesEnderecoDto> cadastrarEndereco(@PathVariable("id") Long id, @RequestBody CadastrarEnderecoDto enderecoDto, UriComponentsBuilder uriBuilder){
         try {
             var usuario = userRepository.getReferenceById(id);
@@ -137,6 +190,14 @@ public class UserController {
 
     @PostMapping("cadastrarTelefone/{id}")
     @Transactional
+    @Operation(summary = "Cadastrar Telefone", description = "Cadastra o Telefone com base no ID do Usuário, já relacionando-os" +
+            "(Um usuário pode ter vários telefones).")
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", description = "Telefone cadastrado com sucesso",
+            content = @Content(schema = @Schema(implementation = DetalhesTelefoneDto.class), mediaType = "application/json")),
+            @ApiResponse(responseCode = "404", description = "Usuário não encontrado ou formato Json incorreto"),
+            @ApiResponse(responseCode = "500", description = "Erro de servidor.")
+    })
     public ResponseEntity<DetalhesTelefoneDto> cadastrarTelefone(@PathVariable("id") Long id, @RequestBody CadastrarTelefoneDto telefoneDto, UriComponentsBuilder uriBuilder){
         try {
             var usuario = userRepository.getReferenceById(id);
