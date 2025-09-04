@@ -90,7 +90,8 @@ public class ContaController {
     @GetMapping("id")
     @Operation(summary = "Buscar Conta", description = "Busca a conta com base no ID da URL.")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Conta buscada com sucesso!"),
+            @ApiResponse(responseCode = "200", description = "Conta buscada com sucesso!",
+            content = @Content(schema = @Schema(implementation = DetalhesContaDto.class), mediaType = "application/json")),
             @ApiResponse(responseCode = "404", description = "Conta não foi encontrada, ID incorreto."),
             @ApiResponse(responseCode = "500", description = "Erro de servidor.")
     })
