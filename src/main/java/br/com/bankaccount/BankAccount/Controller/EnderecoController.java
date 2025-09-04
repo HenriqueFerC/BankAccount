@@ -3,6 +3,11 @@ package br.com.bankaccount.BankAccount.Controller;
 import br.com.bankaccount.BankAccount.Dto.EnderecoDto.AtualizarEnderecoDto;
 import br.com.bankaccount.BankAccount.Dto.EnderecoDto.DetalhesEnderecoDto;
 import br.com.bankaccount.BankAccount.Repository.EnderecoRepository;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +24,12 @@ public class EnderecoController {
     private EnderecoRepository enderecoRepository;
 
     @GetMapping("id")
+    @Operation(summary = "Buscar Endereço", description = "Busca o Endereço com base no ID selecionado na URL.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Endereço buscado com sucesso!",
+            content = @Content(schema = @Schema(implementation = DetalhesEnderecoDto.class), mediaType = "application/json")),
+            @ApiResponse(responseCode = "404", description = "Endereço não encontrado!")
+    })
     public ResponseEntity<DetalhesEnderecoDto> buscarPorId(@PathVariable("id") Long id){
         try {
             var endereco = enderecoRepository.getReferenceById(id);
@@ -30,6 +41,13 @@ public class EnderecoController {
 
     @PutMapping("atualizarEndereco/{id}")
     @Transactional
+    @Operation(summary = "Atualizar Endereço", description = "Atualiza o Endereço com base no ID da URL e JSON enviado na URL.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Endereço atualizar com sucesso!",
+            content = @Content(schema = @Schema(implementation = DetalhesEnderecoDto.class), mediaType = "application/json")),
+            @ApiResponse(responseCode = "404", description = "Endereço não encontrado para atualizar ou formato incorreto."),
+            @ApiResponse(responseCode = "500", description = "Erro de servidor!")
+    })
     public ResponseEntity<DetalhesEnderecoDto> atualizarEndereco(@PathVariable("id") Long id, @RequestBody AtualizarEnderecoDto enderecoDto){
         try {
             var endereco = enderecoRepository.getReferenceById(id);
@@ -42,6 +60,12 @@ public class EnderecoController {
 
     @DeleteMapping("excluirEndereco/{id}")
     @Transactional
+    @Operation(summary = "Excluir Endereço", description = "Exclui o Endereço com base no ID da URL.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "Endereço excluído com sucesso!"),
+            @ApiResponse(responseCode = "404", description = "ID do Endereço não encontrado!"),
+            @ApiResponse(responseCode = "500", description = "Erro de servidor!")
+    })
     public ResponseEntity<Void> excluirEndereco(@PathVariable("id") Long id){
         try {
             enderecoRepository.deleteById(id);

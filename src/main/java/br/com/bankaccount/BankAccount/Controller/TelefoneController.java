@@ -3,6 +3,7 @@ package br.com.bankaccount.BankAccount.Controller;
 import br.com.bankaccount.BankAccount.Dto.TelefoneDto.AtualizarTelefoneDto;
 import br.com.bankaccount.BankAccount.Dto.TelefoneDto.DetalhesTelefoneDto;
 import br.com.bankaccount.BankAccount.Repository.TelefoneRepository;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,7 @@ public class TelefoneController {
 
     @PutMapping("atualizarTelefone/{id}")
     @Transactional
+    @Operation(summary = "Atualizar Telefone", description = "")
     public ResponseEntity<DetalhesTelefoneDto> atualizarTelefone(@PathVariable("id") Long id, AtualizarTelefoneDto telefoneDto){
         try {
             var telefone = telefoneRepository.getReferenceById(id);

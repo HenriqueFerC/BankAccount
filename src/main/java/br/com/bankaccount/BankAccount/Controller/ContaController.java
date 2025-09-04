@@ -7,6 +7,11 @@ import br.com.bankaccount.BankAccount.Dto.TransacaoDto.DetalhesTransacaoDto;
 import br.com.bankaccount.BankAccount.Repository.ContaRepository;
 import br.com.bankaccount.BankAccount.Repository.TransacaoRepository;
 import br.com.bankaccount.BankAccount.model.Transacao;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +36,14 @@ public class ContaController {
     //Método de transação de Conta
     @PostMapping("realizarTransacao/{idRemetente}/{idDestinatario}")
     @Transactional
+    @Operation(summary = "Operação de Transação x Conta", description = "Usando o ID da conta pagante e ID da conta recebedora," +
+            " junto com o json, realiza o cadastro conta x transação.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", description = "Transação e Conta cadastrados com sucesso!",
+            content = @Content(schema = @Schema(implementation = DetalhesTransacaoDto.class), mediaType = "application/json")),
+            @ApiResponse(responseCode = "404", description = "ID's das contas não encontrados ou formato json incorreto."),
+            @ApiResponse(responseCode = "500", description = "Erro de servidor.")
+    })
     public ResponseEntity<DetalhesTransacaoDto> transacao(@PathVariable("idRemetente") Long id, @PathVariable("idDestinatario") Long id2, @RequestBody CadastrarTransacaoDto transacaoDto, UriComponentsBuilder uriBuilder){
         try {
             var conta1 = contaRepository.getReferenceById(id);
@@ -56,6 +69,13 @@ public class ContaController {
 
     @PutMapping("atualizarConta/{id}")
     @Transactional
+    @Operation(summary = "Atualizar Conta", description = "Atualiza a Conta com base no ID da URL.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", description = "Conta atualizada com sucesso!",
+            content = @Content(schema = @Schema(implementation = DetalhesContaDto.class), mediaType = "application/json")),
+            @ApiResponse(responseCode = "404", description = "Conta não encontrada ou formato json incorreto."),
+            @ApiResponse(responseCode = "500", description = "Erro de servidor.")
+    })
     public ResponseEntity<DetalhesContaDto> atualizarConta(@PathVariable("id") Long id, @RequestBody AtualizarContaDto contaDto){
         try {
             var conta = contaRepository.getReferenceById(id);
@@ -68,6 +88,12 @@ public class ContaController {
     }
 
     @GetMapping("id")
+    @Operation(summary = "Buscar Conta", description = "Busca a conta com base no ID da URL.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Conta buscada com sucesso!"),
+            @ApiResponse(responseCode = "404", description = "Conta não foi encontrada, ID incorreto."),
+            @ApiResponse(responseCode = "500", description = "Erro de servidor.")
+    })
     public ResponseEntity<DetalhesContaDto> buscarPorId(@PathVariable("id") Long id){
         try {
             var conta = contaRepository.getReferenceById(id);
