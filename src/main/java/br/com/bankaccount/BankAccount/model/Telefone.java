@@ -1,7 +1,7 @@
 package br.com.bankaccount.BankAccount.model;
 
-import br.com.bankaccount.BankAccount.Dto.TelefoneDto.AtualizarTelefoneDto;
-import br.com.bankaccount.BankAccount.Dto.TelefoneDto.CadastrarTelefoneDto;
+import br.com.bankaccount.BankAccount.dto.TelefoneDto.AtualizarTelefoneDto;
+import br.com.bankaccount.BankAccount.dto.TelefoneDto.CadastrarTelefoneDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

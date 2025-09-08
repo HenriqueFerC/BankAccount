@@ -1,4 +1,4 @@
-package br.com.bankaccount.BankAccount.Dto.TransacaoDto;
+package br.com.bankaccount.BankAccount.dto.TransacaoDto;
 
 import br.com.bankaccount.BankAccount.model.TipoTransacao;
 import io.swagger.v3.oas.annotations.media.Schema;

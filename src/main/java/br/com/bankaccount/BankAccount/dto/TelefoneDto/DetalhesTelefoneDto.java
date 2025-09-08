@@ -1,6 +1,6 @@
-package br.com.bankaccount.BankAccount.Dto.TelefoneDto;
+package br.com.bankaccount.BankAccount.dto.TelefoneDto;
 
-import br.com.bankaccount.BankAccount.Dto.UserDto.DetalhesUserDto;
+import br.com.bankaccount.BankAccount.dto.UserDto.DetalhesUserDto;
 import br.com.bankaccount.BankAccount.model.Telefone;
 
 public record DetalhesTelefoneDto(short ddd, int numero, DetalhesUserDto userDto) {

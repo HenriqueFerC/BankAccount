@@ -1,6 +1,6 @@
 package br.com.bankaccount.BankAccount.Controller;
 
-import br.com.bankaccount.BankAccount.Dto.TransacaoDto.DetalhesTransacaoDto;
+import br.com.bankaccount.BankAccount.dto.TransacaoDto.DetalhesTransacaoDto;
 import br.com.bankaccount.BankAccount.Repository.TransacaoRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -31,6 +31,7 @@ public class TransacaoController {
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Transações buscadas com sucesso!",
             content = @Content(schema = @Schema(implementation = DetalhesTransacaoDto.class), mediaType = "application/json")),
+            @ApiResponse(responseCode = "403", description = "Não autorizado ou token invalido."),
             @ApiResponse(responseCode = "404", description = "Transações não encontradas!"),
             @ApiResponse(responseCode = "500", description = "Erro de Servidor.")
     })
@@ -44,6 +45,7 @@ public class TransacaoController {
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Lista de Transações buscadas com sucesso!",
             content = @Content(schema = @Schema(implementation = DetalhesTransacaoDto.class), mediaType = "application/json")),
+            @ApiResponse(responseCode = "403", description = "Não autorizado ou token invalido."),
             @ApiResponse(responseCode = "404", description = "Nenhuma transação foi encontrada."),
             @ApiResponse(responseCode = "500", description = "Erro de servidor.")
     })
@@ -60,6 +62,7 @@ public class TransacaoController {
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Transação buscada com sucesso!",
             content = @Content(schema = @Schema(implementation = DetalhesTransacaoDto.class), mediaType = "application/json")),
+            @ApiResponse(responseCode = "403", description = "Não autorizado ou token invalido."),
             @ApiResponse(responseCode = "404", description = "Transação não encontrada. ID incorreto."),
             @ApiResponse(responseCode = "500", description = "Erro de servidor.")
     })

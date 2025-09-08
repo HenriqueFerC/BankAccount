@@ -1,6 +1,6 @@
 package br.com.bankaccount.BankAccount.model;
 
-import br.com.bankaccount.BankAccount.Dto.TransacaoDto.CadastrarTransacaoDto;
+import br.com.bankaccount.BankAccount.dto.TransacaoDto.CadastrarTransacaoDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

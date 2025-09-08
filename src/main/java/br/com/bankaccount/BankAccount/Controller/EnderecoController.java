@@ -1,7 +1,7 @@
 package br.com.bankaccount.BankAccount.Controller;
 
-import br.com.bankaccount.BankAccount.Dto.EnderecoDto.AtualizarEnderecoDto;
-import br.com.bankaccount.BankAccount.Dto.EnderecoDto.DetalhesEnderecoDto;
+import br.com.bankaccount.BankAccount.dto.EnderecoDto.AtualizarEnderecoDto;
+import br.com.bankaccount.BankAccount.dto.EnderecoDto.DetalhesEnderecoDto;
 import br.com.bankaccount.BankAccount.Repository.EnderecoRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -28,6 +28,7 @@ public class EnderecoController {
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Endereço buscado com sucesso!",
             content = @Content(schema = @Schema(implementation = DetalhesEnderecoDto.class), mediaType = "application/json")),
+            @ApiResponse(responseCode = "403", description = "Não autorizado ou token invalido."),
             @ApiResponse(responseCode = "404", description = "Endereço não encontrado!")
     })
     public ResponseEntity<DetalhesEnderecoDto> buscarPorId(@PathVariable("id") Long id){
@@ -45,6 +46,7 @@ public class EnderecoController {
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Endereço atualizar com sucesso!",
             content = @Content(schema = @Schema(implementation = DetalhesEnderecoDto.class), mediaType = "application/json")),
+            @ApiResponse(responseCode = "403", description = "Não autorizado ou token invalido."),
             @ApiResponse(responseCode = "404", description = "Endereço não encontrado para atualizar ou formato incorreto."),
             @ApiResponse(responseCode = "500", description = "Erro de servidor!")
     })
@@ -63,6 +65,7 @@ public class EnderecoController {
     @Operation(summary = "Excluir Endereço", description = "Exclui o Endereço com base no ID da URL.")
     @ApiResponses({
             @ApiResponse(responseCode = "204", description = "Endereço excluído com sucesso!"),
+            @ApiResponse(responseCode = "403", description = "Não autorizado ou token invalido."),
             @ApiResponse(responseCode = "404", description = "ID do Endereço não encontrado!"),
             @ApiResponse(responseCode = "500", description = "Erro de servidor!")
     })

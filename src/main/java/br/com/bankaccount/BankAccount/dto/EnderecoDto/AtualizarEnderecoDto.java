@@ -1,4 +1,4 @@
-package br.com.bankaccount.BankAccount.Dto.EnderecoDto;
+package br.com.bankaccount.BankAccount.dto.EnderecoDto;
 
 import br.com.bankaccount.BankAccount.model.Estados;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -7,7 +7,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
-public record CadastrarEnderecoDto(
+public record AtualizarEnderecoDto(
         @Schema(description = "O Estado escolhido precisa estar na lista de opções. Exemplo: São Paulo (SP)")
         Estados estado,
         @Size(min = 3, max = 30, message = "Nome da cidade precisa ter entre 3 a 30 caractéres!")

@@ -1,7 +1,7 @@
 package br.com.bankaccount.BankAccount.model;
 
-import br.com.bankaccount.BankAccount.Dto.ContaDto.AtualizarContaDto;
-import br.com.bankaccount.BankAccount.Dto.ContaDto.CadastrarContaDto;
+import br.com.bankaccount.BankAccount.dto.ContaDto.AtualizarContaDto;
+import br.com.bankaccount.BankAccount.dto.ContaDto.CadastrarContaDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

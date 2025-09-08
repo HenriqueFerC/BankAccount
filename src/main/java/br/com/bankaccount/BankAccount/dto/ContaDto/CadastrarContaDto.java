@@ -1,7 +1,6 @@
-package br.com.bankaccount.BankAccount.Dto.ContaDto;
+package br.com.bankaccount.BankAccount.dto.ContaDto;
 
 
-import br.com.bankaccount.BankAccount.model.Conta;
 import br.com.bankaccount.BankAccount.model.TipoConta;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Min;

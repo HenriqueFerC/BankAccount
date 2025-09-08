@@ -1,14 +1,14 @@
 package br.com.bankaccount.BankAccount.Controller;
 
-import br.com.bankaccount.BankAccount.Dto.ContaDto.CadastrarContaDto;
-import br.com.bankaccount.BankAccount.Dto.ContaDto.DetalhesContaDto;
-import br.com.bankaccount.BankAccount.Dto.EnderecoDto.CadastrarEnderecoDto;
-import br.com.bankaccount.BankAccount.Dto.EnderecoDto.DetalhesEnderecoDto;
-import br.com.bankaccount.BankAccount.Dto.TelefoneDto.CadastrarTelefoneDto;
-import br.com.bankaccount.BankAccount.Dto.TelefoneDto.DetalhesTelefoneDto;
-import br.com.bankaccount.BankAccount.Dto.UserDto.AtualizarUserDto;
-import br.com.bankaccount.BankAccount.Dto.UserDto.CadastrarUserDto;
-import br.com.bankaccount.BankAccount.Dto.UserDto.DetalhesUserDto;
+import br.com.bankaccount.BankAccount.dto.ContaDto.CadastrarContaDto;
+import br.com.bankaccount.BankAccount.dto.ContaDto.DetalhesContaDto;
+import br.com.bankaccount.BankAccount.dto.EnderecoDto.CadastrarEnderecoDto;
+import br.com.bankaccount.BankAccount.dto.EnderecoDto.DetalhesEnderecoDto;
+import br.com.bankaccount.BankAccount.dto.TelefoneDto.CadastrarTelefoneDto;
+import br.com.bankaccount.BankAccount.dto.TelefoneDto.DetalhesTelefoneDto;
+import br.com.bankaccount.BankAccount.dto.UserDto.AtualizarUserDto;
+import br.com.bankaccount.BankAccount.dto.UserDto.CadastrarUserDto;
+import br.com.bankaccount.BankAccount.dto.UserDto.DetalhesUserDto;
 import br.com.bankaccount.BankAccount.Repository.ContaRepository;
 import br.com.bankaccount.BankAccount.Repository.EnderecoRepository;
 import br.com.bankaccount.BankAccount.Repository.TelefoneRepository;
@@ -28,6 +28,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -51,6 +52,9 @@ public class UserController {
     @Autowired
     private TelefoneRepository telefoneRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @PostMapping("cadastrar")
     @Transactional
     @Operation(summary = "Cadastrar Usuário", description = "Cadastra o Usuário com base no JSON enviado para a URL.")
@@ -61,17 +65,20 @@ public class UserController {
             @ApiResponse(responseCode = "500", description = "Erro de servidor.")
     })
     public ResponseEntity<DetalhesUserDto> cadastrar(@RequestBody CadastrarUserDto userDto, UriComponentsBuilder uriBuilder){
-        var usuario = new User(userDto);
+        var usuario = new User(userDto.nome(), passwordEncoder.encode(userDto.password()), userDto.userType(), userDto.cpfCnpj());
         userRepository.save(usuario);
         var uri = uriBuilder.path("user/{id}").buildAndExpand(usuario.getId()).toUri();
         return ResponseEntity.created(uri).body(new DetalhesUserDto(usuario));
     }
+
+
 
     @GetMapping("{id}")
     @Operation(summary = "Buscar Usuário por ID", description = "Busca o usuário com base no ID da URL.")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Usuário buscado com sucesso!",
             content = @Content(schema = @Schema(implementation = DetalhesUserDto.class), mediaType = "application/json")),
+            @ApiResponse(responseCode = "403", description = "Não autorizado ou token invalido."),
             @ApiResponse(responseCode = "404", description = "Usuário não encontrado. ID incorreto."),
             @ApiResponse(responseCode = "500", description = "Erro de servidor.")
     })
@@ -89,6 +96,7 @@ public class UserController {
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Lista de Usuários buscada com sucesso!",
             content = @Content(schema = @Schema(implementation = DetalhesUserDto.class), mediaType = "application/json")),
+            @ApiResponse(responseCode = "403", description = "Não autorizado ou token invalido."),
             @ApiResponse(responseCode = "404", description = "Nenhum usuário foi encontrado."),
             @ApiResponse(responseCode = "500", description = "Erro de servidor.")
     })
@@ -106,6 +114,7 @@ public class UserController {
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Usuário atualizado com sucesso!",
             content = @Content(schema = @Schema(implementation = DetalhesUserDto.class), mediaType = "application/json")),
+            @ApiResponse(responseCode = "403", description = "Não autorizado ou token invalido."),
             @ApiResponse(responseCode = "404", description = "Usuário não encontrado ou formato Json incorreto."),
             @ApiResponse(responseCode = "500", description = "Erro de servidor.")
     })
@@ -125,6 +134,7 @@ public class UserController {
     @Operation(summary = "Excluir Usuário", description = "Exclui o Usuário e todos seus relacionados (Cascade) com base no ID da URL.")
     @ApiResponses({
             @ApiResponse(responseCode = "204", description = "Usuário excluído com sucesso!"),
+            @ApiResponse(responseCode = "403", description = "Não autorizado ou token invalido."),
             @ApiResponse(responseCode = "404", description = "Usuário não encontrado. ID incorreto."),
             @ApiResponse(responseCode = "500", description = "Erro de servidor.")
     })
@@ -145,6 +155,7 @@ public class UserController {
     @ApiResponses({
             @ApiResponse(responseCode = "201", description = "Conta criada com sucesso",
             content = @Content(schema = @Schema(implementation = DetalhesContaDto.class), mediaType = "application/json")),
+            @ApiResponse(responseCode = "403", description = "Não autorizado ou token invalido."),
             @ApiResponse(responseCode = "404", description = "Usuário não encontrado ou formato Json incorreto"),
             @ApiResponse(responseCode = "500", description = "Erro de servidor.")
     })
@@ -169,6 +180,7 @@ public class UserController {
     @ApiResponses({
             @ApiResponse(responseCode = "201", description = "Endereço cadastrado com sucesso!",
             content = @Content(schema = @Schema(implementation = DetalhesEnderecoDto.class), mediaType = "application/json")),
+            @ApiResponse(responseCode = "403", description = "Não autorizado ou token invalido."),
             @ApiResponse(responseCode = "404", description = "Usuário não encontrado ou formato Json incorreto."),
             @ApiResponse(responseCode = "500", description = "Erro de servidor.")
     })
@@ -195,6 +207,7 @@ public class UserController {
     @ApiResponses({
             @ApiResponse(responseCode = "201", description = "Telefone cadastrado com sucesso",
             content = @Content(schema = @Schema(implementation = DetalhesTelefoneDto.class), mediaType = "application/json")),
+            @ApiResponse(responseCode = "403", description = "Não autorizado ou token invalido."),
             @ApiResponse(responseCode = "404", description = "Usuário não encontrado ou formato Json incorreto"),
             @ApiResponse(responseCode = "500", description = "Erro de servidor.")
     })

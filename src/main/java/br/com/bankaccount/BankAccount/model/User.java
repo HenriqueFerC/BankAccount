@@ -1,14 +1,17 @@
 package br.com.bankaccount.BankAccount.model;
 
-import br.com.bankaccount.BankAccount.Dto.UserDto.AtualizarUserDto;
-import br.com.bankaccount.BankAccount.Dto.UserDto.CadastrarUserDto;
+import br.com.bankaccount.BankAccount.dto.UserDto.AtualizarUserDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @Getter
@@ -18,7 +21,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "TB_USER")
-public class User {
+public class User implements UserDetails {
 
     @Id
     @GeneratedValue
@@ -28,7 +31,7 @@ public class User {
     @Column(name = "NOME", length = 80, nullable = false)
     private String nome;
 
-    @Column(name = "PASSWORD", length = 15, nullable = false)
+    @Column(name = "PASSWORD", nullable = false)
     private String password;
 
     @Enumerated(EnumType.STRING)
@@ -55,11 +58,11 @@ public class User {
         telefones.remove(telefone);
     }
 
-    public User(CadastrarUserDto userDto){
-        nome = userDto.nome();
-        password = userDto.password();
-        userType = userDto.userType();
-        cpfCnpj = userDto.cpfCnpj();
+    public User(String nome, String password, UserType userType, Long cpfCnpj){
+        this.nome = nome;
+        this.password = password;
+        this.userType = userType;
+        this.cpfCnpj = cpfCnpj;
     }
 
     public void atualizarUser(AtualizarUserDto userDto){
@@ -67,5 +70,40 @@ public class User {
         password = userDto.password();
         userType = userDto.userType();
         cpfCnpj = userDto.cpfCnpj();
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities(){
+        return List.of(new SimpleGrantedAuthority(userType.name()));
+    }
+
+    @Override
+    public String getUsername(){
+        return nome;
+    }
+
+    @Override
+    public String getPassword(){
+        return password;
+    }
+
+    @Override
+    public boolean isAccountNonExpired(){
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked(){
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired(){
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled(){
+        return true;
     }
 }

@@ -1,7 +1,7 @@
 package br.com.bankaccount.BankAccount.Controller;
 
-import br.com.bankaccount.BankAccount.Dto.TelefoneDto.AtualizarTelefoneDto;
-import br.com.bankaccount.BankAccount.Dto.TelefoneDto.DetalhesTelefoneDto;
+import br.com.bankaccount.BankAccount.dto.TelefoneDto.AtualizarTelefoneDto;
+import br.com.bankaccount.BankAccount.dto.TelefoneDto.DetalhesTelefoneDto;
 import br.com.bankaccount.BankAccount.Repository.TelefoneRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -29,6 +29,7 @@ public class TelefoneController {
     @ApiResponses({
             @ApiResponse(responseCode = "201", description = "Telefone atualizado com sucesso!",
             content = @Content(schema = @Schema(implementation = DetalhesTelefoneDto.class), mediaType = "application/json")),
+            @ApiResponse(responseCode = "403", description = "Não autorizado ou token invalido."),
             @ApiResponse(responseCode = "404", description = "Telefone não encontrado ou formato Json incorreto."),
             @ApiResponse(responseCode = "500", description = "Erro de servidor.")
     })
@@ -48,6 +49,7 @@ public class TelefoneController {
     @Operation(summary = "Excluir Telefone", description = "Exclui o telefone com base no ID da URL.")
     @ApiResponses({
             @ApiResponse(responseCode = "204", description = "Telefone excluído com sucesso."),
+            @ApiResponse(responseCode = "403", description = "Não autorizado ou token invalido."),
             @ApiResponse(responseCode = "404", description = "Telefone não encontrado. ID incorreto."),
             @ApiResponse(responseCode = "500", description = "Erro de servidor.")
     })

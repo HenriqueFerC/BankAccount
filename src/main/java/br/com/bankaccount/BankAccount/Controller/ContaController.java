@@ -1,9 +1,9 @@
 package br.com.bankaccount.BankAccount.Controller;
 
-import br.com.bankaccount.BankAccount.Dto.ContaDto.AtualizarContaDto;
-import br.com.bankaccount.BankAccount.Dto.ContaDto.DetalhesContaDto;
-import br.com.bankaccount.BankAccount.Dto.TransacaoDto.CadastrarTransacaoDto;
-import br.com.bankaccount.BankAccount.Dto.TransacaoDto.DetalhesTransacaoDto;
+import br.com.bankaccount.BankAccount.dto.ContaDto.AtualizarContaDto;
+import br.com.bankaccount.BankAccount.dto.ContaDto.DetalhesContaDto;
+import br.com.bankaccount.BankAccount.dto.TransacaoDto.CadastrarTransacaoDto;
+import br.com.bankaccount.BankAccount.dto.TransacaoDto.DetalhesTransacaoDto;
 import br.com.bankaccount.BankAccount.Repository.ContaRepository;
 import br.com.bankaccount.BankAccount.Repository.TransacaoRepository;
 import br.com.bankaccount.BankAccount.model.Transacao;
@@ -16,7 +16,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -41,6 +40,7 @@ public class ContaController {
     @ApiResponses({
             @ApiResponse(responseCode = "201", description = "Transação e Conta cadastrados com sucesso!",
             content = @Content(schema = @Schema(implementation = DetalhesTransacaoDto.class), mediaType = "application/json")),
+            @ApiResponse(responseCode = "403", description = "Não autorizado ou token invalido."),
             @ApiResponse(responseCode = "404", description = "ID's das contas não encontrados ou formato json incorreto."),
             @ApiResponse(responseCode = "500", description = "Erro de servidor.")
     })
@@ -73,6 +73,7 @@ public class ContaController {
     @ApiResponses({
             @ApiResponse(responseCode = "201", description = "Conta atualizada com sucesso!",
             content = @Content(schema = @Schema(implementation = DetalhesContaDto.class), mediaType = "application/json")),
+            @ApiResponse(responseCode = "403", description = "Não autorizado ou token invalido."),
             @ApiResponse(responseCode = "404", description = "Conta não encontrada ou formato json incorreto."),
             @ApiResponse(responseCode = "500", description = "Erro de servidor.")
     })
@@ -92,6 +93,7 @@ public class ContaController {
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Conta buscada com sucesso!",
             content = @Content(schema = @Schema(implementation = DetalhesContaDto.class), mediaType = "application/json")),
+            @ApiResponse(responseCode = "403", description = "Não autorizado ou token invalido."),
             @ApiResponse(responseCode = "404", description = "Conta não foi encontrada, ID incorreto."),
             @ApiResponse(responseCode = "500", description = "Erro de servidor.")
     })

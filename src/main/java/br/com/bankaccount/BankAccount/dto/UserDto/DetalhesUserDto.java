@@ -1,4 +1,4 @@
-package br.com.bankaccount.BankAccount.Dto.UserDto;
+package br.com.bankaccount.BankAccount.dto.UserDto;
 
 import br.com.bankaccount.BankAccount.model.User;
 import br.com.bankaccount.BankAccount.model.UserType;

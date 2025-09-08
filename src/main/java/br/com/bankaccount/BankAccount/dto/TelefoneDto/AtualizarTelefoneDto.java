@@ -1,4 +1,4 @@
-package br.com.bankaccount.BankAccount.Dto.TelefoneDto;
+package br.com.bankaccount.BankAccount.dto.TelefoneDto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Min;

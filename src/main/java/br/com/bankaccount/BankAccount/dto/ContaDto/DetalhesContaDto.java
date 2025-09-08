@@ -1,6 +1,6 @@
-package br.com.bankaccount.BankAccount.Dto.ContaDto;
+package br.com.bankaccount.BankAccount.dto.ContaDto;
 
-import br.com.bankaccount.BankAccount.Dto.UserDto.DetalhesUserDto;
+import br.com.bankaccount.BankAccount.dto.UserDto.DetalhesUserDto;
 import br.com.bankaccount.BankAccount.model.Conta;
 import br.com.bankaccount.BankAccount.model.TipoConta;
 
