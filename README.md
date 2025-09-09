@@ -51,7 +51,9 @@ ______________________________________
 ### Atualização de Usuário
 
 `/user/atualizar/{id}`.
-Requer Token.
+
+* **Requer Token.**
+
 JSON:
 {
 	"nome": "Rick",
@@ -63,13 +65,17 @@ ______________________________________
 ### Deletar Usuário
 
 `/user/excluir/{id}`.
-Requer Token.
+
+* **Requer Token.**
+
 Observação: Exclusão em cascata, excluindo o usuário, todos os relacionados serão deletados.
 ______________________________________
 ### Cadastro de Conta
 
 `/user/cadastrarConta/{idDoUsuário}`.
-Requer Token.
+
+* **Requer Token.**
+
 JSON:
 {
 	"numero": 134123,
@@ -89,12 +95,15 @@ ______________________________________
 ### Buscar Conta por ID
 
 `/conta/{id}`.
-Requer token.
+
+* **Requer Token.**
+
 ______________________________________
 ### Realizar transação entre Contas.
 
 `/conta/realizarTransacao/{idRemetente}/{idDestinatario}`.
-Requer Token.
+
+* **Requer Token.**
 
 JSON:
 {
@@ -105,7 +114,9 @@ ______________________________________
 ### Cadastro de Endereço
 
 `user/cadastrarEndereco/{idDoUsuário}`.
-Requer Token.
+
+* **Requer Token.**
+
 JSON:
 {
 	"estado": "São Paulo",
@@ -119,7 +130,9 @@ ______________________________________
 ### Atualização de Endereço
 
 `/endereco/atualizarEndereco/{id}`.
-Requer Token.
+
+* **Requer Token.**
+
 JSON:
 {
 	"estado": "São Paulo",
@@ -133,17 +146,23 @@ ______________________________________
 ### Deletar Endereço
 
 `/endereco/excluirEndereco/{id}`.
-Requer Token.
+
+* **Requer Token.**
+
 ______________________________________
 ### Busca de Endereço por ID
 
 `/endereco/{id}`.
-Requer Token.
+
+* **Requer Token.**
+
 ______________________________________
 ### Cadastro de Telefone
 
 `/user/cadastrarTelefone/{id}`.
-Requer Token.
+
+* **Requer Token.**
+
 JSON:
 {
   "ddd": 11,
@@ -153,7 +172,9 @@ ______________________________________
 ### Atualização de Telefone
 
 `/telefone/atualizarTelefone/{id}`.
-Requer Token.
+
+* **Requer Token.**
+
 JSON:
 {
   "ddd": 11,
@@ -163,19 +184,27 @@ ______________________________________
 ### Deletar Telefone
 
 `/telefone/excluirTelefone/{id}`.
-Requer Token.
+
+* **Requer Token.**
+
 ______________________________________
 ### Buscar Transação por intervalo de Data
 
 `/transacao/data-inicial/data-final`.
-Requer Token.
+
+* **Requer Token.**
+
 ______________________________________
 ### Buscar Transação por ID
 
 `/transacao/{id}`.
-Requer Token.
+
+* **Requer Token.**
+
 ______________________________________
 Buscar todas as Transações
 
 `/transacao/listar`.
-Requer Token.
+
+* **Requer Token.**
+
