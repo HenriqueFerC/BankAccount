@@ -32,7 +32,7 @@ public class AutenticacaoController {
     private TokenService tokenService;
 
     @PostMapping
-    @Operation(summary = "Login de Usuário", description = "Login de Usuário através de Login e Senha," +
+    @Operation(summary = "Login de Usuário", description = "Login de Usuário através de Login (cpf ou cnpj) e Senha," +
             " validando o Token caso esteja correto.")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Token gerado com sucesso!",
@@ -42,7 +42,7 @@ public class AutenticacaoController {
     }
     )
     public ResponseEntity<TokenJwtDto> login(@RequestBody @Valid DadosLoginDto loginDto){
-        var autenticacaoToken = new UsernamePasswordAuthenticationToken(loginDto.nome(), loginDto.password());
+        var autenticacaoToken = new UsernamePasswordAuthenticationToken(loginDto.cpfCnpj(), loginDto.password());
         var authenticate = authenticationManager.authenticate(autenticacaoToken);
         var token = tokenService.gerarToken((User) authenticate.getPrincipal());
         return ResponseEntity.ok(new TokenJwtDto(token));

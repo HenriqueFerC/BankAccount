@@ -14,6 +14,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.ResponseEntity;
@@ -44,7 +45,7 @@ public class ContaController {
             @ApiResponse(responseCode = "404", description = "ID's das contas não encontrados ou formato json incorreto."),
             @ApiResponse(responseCode = "500", description = "Erro de servidor.")
     })
-    public ResponseEntity<DetalhesTransacaoDto> transacao(@PathVariable("idRemetente") Long id, @PathVariable("idDestinatario") Long id2, @RequestBody CadastrarTransacaoDto transacaoDto, UriComponentsBuilder uriBuilder){
+    public ResponseEntity<DetalhesTransacaoDto> transacao(@PathVariable("idRemetente") Long id, @PathVariable("idDestinatario") Long id2, @RequestBody @Valid CadastrarTransacaoDto transacaoDto, UriComponentsBuilder uriBuilder){
         try {
             var conta1 = contaRepository.getReferenceById(id);
             var conta2 = contaRepository.getReferenceById(id2);
@@ -77,7 +78,7 @@ public class ContaController {
             @ApiResponse(responseCode = "404", description = "Conta não encontrada ou formato json incorreto."),
             @ApiResponse(responseCode = "500", description = "Erro de servidor.")
     })
-    public ResponseEntity<DetalhesContaDto> atualizarConta(@PathVariable("id") Long id, @RequestBody AtualizarContaDto contaDto){
+    public ResponseEntity<DetalhesContaDto> atualizarConta(@PathVariable("id") Long id, @RequestBody @Valid AtualizarContaDto contaDto){
         try {
             var conta = contaRepository.getReferenceById(id);
             conta.atualizarConta(contaDto);

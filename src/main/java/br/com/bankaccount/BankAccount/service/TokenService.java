@@ -31,7 +31,7 @@ public class TokenService {
             Algorithm algorithm = Algorithm.HMAC256(senha);
             return JWT.create()
                     .withIssuer("BankAccount")
-                    .withSubject(user.getNome())
+                    .withSubject(user.getCpfCnpj())
                     .withExpiresAt(Instant.now().plus(Duration.ofHours(1)))
                     .sign(algorithm);
         } catch (JWTCreationException e){

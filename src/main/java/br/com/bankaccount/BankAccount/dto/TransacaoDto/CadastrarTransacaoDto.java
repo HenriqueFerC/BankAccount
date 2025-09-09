@@ -8,6 +8,7 @@ import jakarta.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
 public record CadastrarTransacaoDto(
+        @NotNull(message = "Tipo de Transação precisa ser definida!")
         @Schema(description = "Tipo de Transação precisa estar na lista de opções. Exemplo: PIX (Pix)")
         TipoTransacao tipoTransacao,
         @Min(value = 0, message = "Valor precisa ser positivo!")

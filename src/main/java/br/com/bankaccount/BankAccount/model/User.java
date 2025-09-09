@@ -38,14 +38,14 @@ public class User implements UserDetails {
     @Column(name = "USER_TYPE", nullable = false)
     private UserType userType;
 
-    @Column(name = "CPF_CNPJ", length = 14, nullable = false, unique = true)
-    private Long cpfCnpj;
+    @Column(name = "CPF_CNPJ", length = 18, nullable = false, unique = true)
+    private String cpfCnpj;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private Endereco endereco;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<Telefone> telefones = new ArrayList<>();;
+    private List<Telefone> telefones = new ArrayList<>();
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.DETACH)
     private Conta conta;
@@ -58,18 +58,18 @@ public class User implements UserDetails {
         telefones.remove(telefone);
     }
 
-    public User(String nome, String password, UserType userType, Long cpfCnpj){
+    public User(String nome, String password, UserType userType, String cpfCnpj){
         this.nome = nome;
         this.password = password;
         this.userType = userType;
         this.cpfCnpj = cpfCnpj;
     }
 
-    public void atualizarUser(AtualizarUserDto userDto){
-        nome = userDto.nome();
-        password = userDto.password();
-        userType = userDto.userType();
-        cpfCnpj = userDto.cpfCnpj();
+    public void atualizarUser(String nome, String password, UserType userType, String cpfCnpj){
+        this.nome = nome;
+        this.password = password;
+        this.userType = userType;
+        this.cpfCnpj = cpfCnpj;
     }
 
     @Override

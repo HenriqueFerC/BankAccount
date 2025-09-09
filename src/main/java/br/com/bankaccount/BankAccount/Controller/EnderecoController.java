@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.ResponseEntity;
@@ -50,7 +51,7 @@ public class EnderecoController {
             @ApiResponse(responseCode = "404", description = "Endereço não encontrado para atualizar ou formato incorreto."),
             @ApiResponse(responseCode = "500", description = "Erro de servidor!")
     })
-    public ResponseEntity<DetalhesEnderecoDto> atualizarEndereco(@PathVariable("id") Long id, @RequestBody AtualizarEnderecoDto enderecoDto){
+    public ResponseEntity<DetalhesEnderecoDto> atualizarEndereco(@PathVariable("id") Long id, @RequestBody @Valid AtualizarEnderecoDto enderecoDto){
         try {
             var endereco = enderecoRepository.getReferenceById(id);
             endereco.atualizarEndereco(enderecoDto);
@@ -71,6 +72,9 @@ public class EnderecoController {
     })
     public ResponseEntity<Void> excluirEndereco(@PathVariable("id") Long id){
         try {
+            var endereco = enderecoRepository.getReferenceById(id);
+            var usuario = endereco.getUser();
+            usuario.setEndereco(null);
             enderecoRepository.deleteById(id);
             return ResponseEntity.noContent().build();
         } catch (EmptyResultDataAccessException e){

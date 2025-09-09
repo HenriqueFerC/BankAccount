@@ -18,6 +18,7 @@ public record CadastrarContaDto(
         @Schema(description = "Saldo da conta precisa ser positivo e não nulo. Exemplo: 0")
         BigDecimal saldo,
         @Schema(description = "Tipo de Conta precisa ser uma das opções possíveis. Exemplo: Conta Corrente (CC)")
+        @NotNull(message = "Tipo de Conta precisa ser definida!")
         TipoConta tipoConta
     ) {
 }

@@ -24,6 +24,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Pageable;
@@ -60,11 +61,11 @@ public class UserController {
     @Operation(summary = "Cadastrar Usuário", description = "Cadastra o Usuário com base no JSON enviado para a URL.")
     @ApiResponses({
             @ApiResponse(responseCode = "201", description = "Usuário cadastrado com sucesso!",
-            content = @Content(schema = @Schema(implementation = DetalhesContaDto.class), mediaType = "application/json")),
+            content = @Content(schema = @Schema(implementation = DetalhesUserDto.class), mediaType = "application/json")),
             @ApiResponse(responseCode = "404", description = "Formato do Json incorreto."),
             @ApiResponse(responseCode = "500", description = "Erro de servidor.")
     })
-    public ResponseEntity<DetalhesUserDto> cadastrar(@RequestBody CadastrarUserDto userDto, UriComponentsBuilder uriBuilder){
+    public ResponseEntity<DetalhesUserDto> cadastrar(@RequestBody @Valid CadastrarUserDto userDto, UriComponentsBuilder uriBuilder){
         var usuario = new User(userDto.nome(), passwordEncoder.encode(userDto.password()), userDto.userType(), userDto.cpfCnpj());
         userRepository.save(usuario);
         var uri = uriBuilder.path("user/{id}").buildAndExpand(usuario.getId()).toUri();
@@ -118,10 +119,10 @@ public class UserController {
             @ApiResponse(responseCode = "404", description = "Usuário não encontrado ou formato Json incorreto."),
             @ApiResponse(responseCode = "500", description = "Erro de servidor.")
     })
-    public ResponseEntity<DetalhesUserDto> atualizar(@PathVariable("id") Long id, @RequestBody AtualizarUserDto userDto){
+    public ResponseEntity<DetalhesUserDto> atualizar(@PathVariable("id") Long id, @RequestBody @Valid AtualizarUserDto userDto){
         try {
             var usuario = userRepository.getReferenceById(id);
-            usuario.atualizarUser(userDto);
+            usuario.atualizarUser(userDto.nome(), passwordEncoder.encode(userDto.password()), userDto.userType(), userDto.cpfCnpj());
             userRepository.save(usuario);
             return ResponseEntity.ok(new DetalhesUserDto(usuario));
         } catch (EmptyResultDataAccessException e){
@@ -159,7 +160,7 @@ public class UserController {
             @ApiResponse(responseCode = "404", description = "Usuário não encontrado ou formato Json incorreto"),
             @ApiResponse(responseCode = "500", description = "Erro de servidor.")
     })
-    public ResponseEntity<DetalhesContaDto> cadastrarConta(@PathVariable("id") Long id, @RequestBody CadastrarContaDto contaDto, UriComponentsBuilder uriBuilder){
+    public ResponseEntity<DetalhesContaDto> cadastrarConta(@PathVariable("id") Long id, @RequestBody @Valid CadastrarContaDto contaDto, UriComponentsBuilder uriBuilder){
         try {
             var usuario = userRepository.getReferenceById(id);
             var conta = new Conta(contaDto, usuario);
@@ -184,7 +185,7 @@ public class UserController {
             @ApiResponse(responseCode = "404", description = "Usuário não encontrado ou formato Json incorreto."),
             @ApiResponse(responseCode = "500", description = "Erro de servidor.")
     })
-    public ResponseEntity<DetalhesEnderecoDto> cadastrarEndereco(@PathVariable("id") Long id, @RequestBody CadastrarEnderecoDto enderecoDto, UriComponentsBuilder uriBuilder){
+    public ResponseEntity<DetalhesEnderecoDto> cadastrarEndereco(@PathVariable("id") Long id, @RequestBody @Valid CadastrarEnderecoDto enderecoDto, UriComponentsBuilder uriBuilder){
         try {
             var usuario = userRepository.getReferenceById(id);
             var endereco = new Endereco(enderecoDto, usuario);
@@ -211,7 +212,7 @@ public class UserController {
             @ApiResponse(responseCode = "404", description = "Usuário não encontrado ou formato Json incorreto"),
             @ApiResponse(responseCode = "500", description = "Erro de servidor.")
     })
-    public ResponseEntity<DetalhesTelefoneDto> cadastrarTelefone(@PathVariable("id") Long id, @RequestBody CadastrarTelefoneDto telefoneDto, UriComponentsBuilder uriBuilder){
+    public ResponseEntity<DetalhesTelefoneDto> cadastrarTelefone(@PathVariable("id") Long id, @RequestBody @Valid CadastrarTelefoneDto telefoneDto, UriComponentsBuilder uriBuilder){
         try {
             var usuario = userRepository.getReferenceById(id);
             var telefone = new Telefone(telefoneDto);

@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.ResponseEntity;
@@ -33,7 +34,7 @@ public class TelefoneController {
             @ApiResponse(responseCode = "404", description = "Telefone não encontrado ou formato Json incorreto."),
             @ApiResponse(responseCode = "500", description = "Erro de servidor.")
     })
-    public ResponseEntity<DetalhesTelefoneDto> atualizarTelefone(@PathVariable("id") Long id, AtualizarTelefoneDto telefoneDto){
+    public ResponseEntity<DetalhesTelefoneDto> atualizarTelefone(@PathVariable("id") Long id, @RequestBody @Valid AtualizarTelefoneDto telefoneDto){
         try {
             var telefone = telefoneRepository.getReferenceById(id);
             telefone.atualizarTelefone(telefoneDto);

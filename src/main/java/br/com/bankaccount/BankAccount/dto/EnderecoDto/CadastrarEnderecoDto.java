@@ -8,6 +8,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 public record CadastrarEnderecoDto(
+        @NotNull(message = "Estado precisa ser definido!")
         @Schema(description = "O Estado escolhido precisa estar na lista de opções. Exemplo: São Paulo (SP)")
         Estados estado,
         @Size(min = 3, max = 30, message = "Nome da cidade precisa ter entre 3 a 30 caractéres!")
