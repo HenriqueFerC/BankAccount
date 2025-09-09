@@ -40,7 +40,8 @@ ______________________________________
 ### Busca de Usuário por ID
 
 `/user/{id}`.
-Requer Token.
+
+* **Requer Token.**
 ______________________________________
 ### Busca de todos os Usuários
 
