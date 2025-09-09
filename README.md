@@ -13,10 +13,10 @@ Funcionalidades:
 - Proteção de endpoints com JWT
 - Documentação Swagger
 
-##Principais Requisições
+## Principais Requisições
 
 ______________________________________
-Cadastro de Usuário 
+### Cadastro de Usuário 
 
 /user/cadastrar
 
@@ -28,7 +28,7 @@ JSON:
 	"cpfCnpj": 12345678912
 }
 ______________________________________
-Login de Usuário
+### Login de Usuário
 
 /login
 
@@ -38,17 +38,17 @@ JSON:
   "password": "123456"
 }
 ______________________________________
-Busca de Usuário por ID
+### Busca de Usuário por ID
 
 /user/{id}
 Requer Token.
 ______________________________________
-Busca de todos os Usuários
+### Busca de todos os Usuários
 
 /user
 Requer Token.
 ______________________________________
-Atualização de Usuário
+### Atualização de Usuário
 
 /user/atualizar/{id}
 Requer Token.
@@ -60,13 +60,13 @@ JSON:
 	"cpfCnpj": 12345678912
 }
 ______________________________________
-Deletar Usuário
+### Deletar Usuário
 
 /user/excluir/{id}
 Requer Token.
 Observação: Exclusão em cascata, excluindo o usuário, todos os relacionados serão deletados.
 ______________________________________
-Cadastro de Conta
+### Cadastro de Conta
 
 /user/cadastrarConta/{idDoUsuário}
 Requer Token.
@@ -77,7 +77,7 @@ JSON:
 	"tipoConta": "Conta Corrente"
 }
 ______________________________________
-Atualização de Conta
+### Atualização de Conta
 
 /conta/atualizarConta/{id}
 Requer Token.
@@ -86,12 +86,12 @@ JSON:
 	"tipoConta": "Conta Poupança"
 }
 ______________________________________
-Buscar Conta por ID
+### Buscar Conta por ID
 
 /conta/{id}
 Requer token.
 ______________________________________
-Realizar transação entre Contas.
+### Realizar transação entre Contas.
 
 /conta/realizarTransacao/{idRemetente}/{idDestinatario}
 Requer Token.
@@ -102,7 +102,7 @@ JSON:
 	"valor": 3025
 }
 ______________________________________
-Cadastro de Endereço
+### Cadastro de Endereço
 
 user/cadastrarEndereco/{idDoUsuário}
 Requer Token.
@@ -116,7 +116,7 @@ JSON:
 	"numero": 188
 }
 ______________________________________
-Atualização de Endereço
+### Atualização de Endereço
 
 /endereco/atualizarEndereco/{id}
 Requer Token.
@@ -130,17 +130,17 @@ JSON:
 	"numero": 188
 }
 ______________________________________
-Deletar Endereço
+### Deletar Endereço
 
 /endereco/excluirEndereco/{id}
 Requer Token.
 ______________________________________
-Busca de Endereço por ID
+### Busca de Endereço por ID
 
 /endereco/{id}
 Requer Token.
 ______________________________________
-Cadastro de Telefone
+### Cadastro de Telefone
 
 /user/cadastrarTelefone/{id}
 Requer Token.
@@ -150,7 +150,7 @@ JSON:
   "numero": 987654321
 }
 ______________________________________
-Atualização de Telefone
+### Atualização de Telefone
 
 /telefone/atualizarTelefone/{id}
 Requer Token.
@@ -160,17 +160,17 @@ JSON:
   "numero": 987654321
 }
 ______________________________________
-Deletar Telefone
+### Deletar Telefone
 
 /telefone/excluirTelefone/{id}
 Requer Token.
 ______________________________________
-Buscar Transação por intervalo de Data
+### Buscar Transação por intervalo de Data
 
 /transacao/data-inicial/data-final
 Requer Token.
 ______________________________________
-Buscar Transação por ID
+### Buscar Transação por ID
 
 /transacao/{id}
 Requer Token.
