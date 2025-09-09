@@ -136,7 +136,7 @@ Requer Token.
 ______________________________________
 ### Busca de Endereço por ID
 
-/endereco/{id}
+`/endereco/{id}`.
 Requer Token.
 ______________________________________
 ### Cadastro de Telefone
