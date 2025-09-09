@@ -25,7 +25,7 @@ JSON:
 	"nome": "Rick",
 	"password": "123456",
 	"userType": "Pessoa Jurídica",
-	"cpfCnpj": 12345678912
+	"cpfCnpj": "12345678912"
 }
 ```
 ______________________________________
@@ -66,7 +66,7 @@ JSON:
 	"nome": "Rick",
 	"password": "123456",
 	"userType": "Pessoa Jurídica",
-	"cpfCnpj": 12345678912
+	"cpfCnpj": "12345678912"
 }
 ```
 ______________________________________
@@ -139,9 +139,9 @@ JSON:
 	"estado": "São Paulo",
 	"cidade": "Barueri",
 	"bairro": "Parque dos Camargos",
-	"cep": "06436-000",
-	"logradouro": "Rua Carolina",
-	"numero": 188
+	"cep": "12345-678",
+	"logradouro": "Rua James",
+	"numero": 513
 }
 ```
 ______________________________________
@@ -157,9 +157,9 @@ JSON:
 	"estado": "São Paulo",
 	"cidade": "Barueri",
 	"bairro": "Parque dos Camargos",
-	"cep": "06436-360",
-	"logradouro": "Rua Carolina",
-	"numero": 188
+	"cep": "32123-123",
+	"logradouro": "Rua Charlie",
+	"numero": 5531
 }
 ```
 ______________________________________
