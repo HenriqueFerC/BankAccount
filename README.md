@@ -46,7 +46,9 @@ ______________________________________
 ### Busca de todos os Usuários
 
 /user
-Requer Token.
+
+* **Requer Token.**
+
 ______________________________________
 ### Atualização de Usuário
 
@@ -86,7 +88,9 @@ ______________________________________
 ### Atualização de Conta
 
 `/conta/atualizarConta/{id}`.
-Requer Token.
+
+* **Requer Token.**
+
 JSON:
 {
 	"tipoConta": "Conta Poupança"
