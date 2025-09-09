@@ -19,13 +19,14 @@ Funcionalidades:
 
 `/user/cadastrar`.
 
-JSON:
+```json
 {
 	"nome": "Rick",
 	"password": "123456",
 	"userType": "Pessoa Jurídica",
 	"cpfCnpj": 12345678912
 }
+```
 ______________________________________
 ### Login de Usuário
 
