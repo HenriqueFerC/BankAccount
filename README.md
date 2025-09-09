@@ -19,6 +19,7 @@ Funcionalidades:
 
 `/user/cadastrar`.
 
+JSON:
 ```json
 {
 	"nome": "Rick",
@@ -33,10 +34,12 @@ ______________________________________
 `/login`
 
 JSON:
+```json
 {
   "nome": "Rick",
   "password": "123456"
 }
+```
 ______________________________________
 ### Busca de Usuário por ID
 
@@ -58,12 +61,14 @@ ______________________________________
 * **Requer Token.**
 
 JSON:
+```json
 {
 	"nome": "Rick",
 	"password": "123456",
 	"userType": "Pessoa Jurídica",
 	"cpfCnpj": 12345678912
 }
+```
 ______________________________________
 ### Deletar Usuário
 
@@ -80,11 +85,13 @@ ______________________________________
 * **Requer Token.**
 
 JSON:
+```json
 {
 	"numero": 134123,
 	"saldo": 10000,
 	"tipoConta": "Conta Corrente"
 }
+```
 ______________________________________
 ### Atualização de Conta
 
@@ -93,9 +100,11 @@ ______________________________________
 * **Requer Token.**
 
 JSON:
+```json
 {
 	"tipoConta": "Conta Poupança"
 }
+```
 ______________________________________
 ### Buscar Conta por ID
 
@@ -111,10 +120,12 @@ ______________________________________
 * **Requer Token.**
 
 JSON:
+```json
 {
 	"tipoTransacao": "Pix",
 	"valor": 3025
 }
+```
 ______________________________________
 ### Cadastro de Endereço
 
@@ -123,6 +134,7 @@ ______________________________________
 * **Requer Token.**
 
 JSON:
+```json
 {
 	"estado": "São Paulo",
 	"cidade": "Barueri",
@@ -131,6 +143,7 @@ JSON:
 	"logradouro": "Rua Carolina",
 	"numero": 188
 }
+```
 ______________________________________
 ### Atualização de Endereço
 
@@ -139,6 +152,7 @@ ______________________________________
 * **Requer Token.**
 
 JSON:
+```json
 {
 	"estado": "São Paulo",
 	"cidade": "Barueri",
@@ -147,6 +161,7 @@ JSON:
 	"logradouro": "Rua Carolina",
 	"numero": 188
 }
+```
 ______________________________________
 ### Deletar Endereço
 
@@ -169,10 +184,12 @@ ______________________________________
 * **Requer Token.**
 
 JSON:
+```json
 {
   "ddd": 11,
   "numero": 987654321
 }
+```
 ______________________________________
 ### Atualização de Telefone
 
@@ -181,10 +198,13 @@ ______________________________________
 * **Requer Token.**
 
 JSON:
+```json
 {
   "ddd": 11,
   "numero": 987654321
 }
+```
+
 ______________________________________
 ### Deletar Telefone
 
