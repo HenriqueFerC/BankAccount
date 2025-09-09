@@ -13,7 +13,7 @@ Funcionalidades:
 - Proteção de endpoints com JWT
 - Documentação Swagger
 
-Principais Requisições
+##Principais Requisições
 
 ______________________________________
 Cadastro de Usuário 
