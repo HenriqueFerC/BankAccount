@@ -17,7 +17,7 @@ Funcionalidades:
 
 ### Cadastro de Usuário 
 
-/user/cadastrar
+`/user/cadastrar`.
 
 JSON:
 {
@@ -29,7 +29,7 @@ JSON:
 ______________________________________
 ### Login de Usuário
 
-/login
+`/login`
 
 JSON:
 {
@@ -39,7 +39,7 @@ JSON:
 ______________________________________
 ### Busca de Usuário por ID
 
-/user/{id}
+`/user/{id}`.
 Requer Token.
 ______________________________________
 ### Busca de todos os Usuários
@@ -49,7 +49,7 @@ Requer Token.
 ______________________________________
 ### Atualização de Usuário
 
-/user/atualizar/{id}
+`/user/atualizar/{id}`.
 Requer Token.
 JSON:
 {
@@ -61,13 +61,13 @@ JSON:
 ______________________________________
 ### Deletar Usuário
 
-/user/excluir/{id}
+`/user/excluir/{id}`.
 Requer Token.
 Observação: Exclusão em cascata, excluindo o usuário, todos os relacionados serão deletados.
 ______________________________________
 ### Cadastro de Conta
 
-/user/cadastrarConta/{idDoUsuário}
+`/user/cadastrarConta/{idDoUsuário}`.
 Requer Token.
 JSON:
 {
@@ -78,7 +78,7 @@ JSON:
 ______________________________________
 ### Atualização de Conta
 
-/conta/atualizarConta/{id}
+`/conta/atualizarConta/{id}`.
 Requer Token.
 JSON:
 {
@@ -87,12 +87,12 @@ JSON:
 ______________________________________
 ### Buscar Conta por ID
 
-/conta/{id}
+`/conta/{id}`.
 Requer token.
 ______________________________________
 ### Realizar transação entre Contas.
 
-/conta/realizarTransacao/{idRemetente}/{idDestinatario}
+`/conta/realizarTransacao/{idRemetente}/{idDestinatario}`.
 Requer Token.
 
 JSON:
@@ -103,7 +103,7 @@ JSON:
 ______________________________________
 ### Cadastro de Endereço
 
-user/cadastrarEndereco/{idDoUsuário}
+`user/cadastrarEndereco/{idDoUsuário}`.
 Requer Token.
 JSON:
 {
@@ -117,7 +117,7 @@ JSON:
 ______________________________________
 ### Atualização de Endereço
 
-/endereco/atualizarEndereco/{id}
+`/endereco/atualizarEndereco/{id}`.
 Requer Token.
 JSON:
 {
@@ -131,7 +131,7 @@ JSON:
 ______________________________________
 ### Deletar Endereço
 
-/endereco/excluirEndereco/{id}
+`/endereco/excluirEndereco/{id}`.
 Requer Token.
 ______________________________________
 ### Busca de Endereço por ID
@@ -141,7 +141,7 @@ Requer Token.
 ______________________________________
 ### Cadastro de Telefone
 
-/user/cadastrarTelefone/{id}
+`/user/cadastrarTelefone/{id}`.
 Requer Token.
 JSON:
 {
@@ -151,7 +151,7 @@ JSON:
 ______________________________________
 ### Atualização de Telefone
 
-/telefone/atualizarTelefone/{id}
+`/telefone/atualizarTelefone/{id}`.
 Requer Token.
 JSON:
 {
@@ -161,20 +161,20 @@ JSON:
 ______________________________________
 ### Deletar Telefone
 
-/telefone/excluirTelefone/{id}
+`/telefone/excluirTelefone/{id}`.
 Requer Token.
 ______________________________________
 ### Buscar Transação por intervalo de Data
 
-/transacao/data-inicial/data-final
+`/transacao/data-inicial/data-final`.
 Requer Token.
 ______________________________________
 ### Buscar Transação por ID
 
-/transacao/{id}
+`/transacao/{id}`.
 Requer Token.
 ______________________________________
 Buscar todas as Transações
 
-/transacao/listar
+`/transacao/listar`.
 Requer Token.
