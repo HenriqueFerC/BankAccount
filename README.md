@@ -15,7 +15,6 @@ Funcionalidades:
 
 ## Principais Requisições
 
-______________________________________
 ### Cadastro de Usuário 
 
 /user/cadastrar
