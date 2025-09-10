@@ -23,12 +23,15 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -83,9 +86,12 @@ public class UserController {
             @ApiResponse(responseCode = "404", description = "Usuário não encontrado. ID incorreto."),
             @ApiResponse(responseCode = "500", description = "Erro de servidor.")
     })
-    public ResponseEntity<DetalhesUserDto> buscarPorId(@PathVariable("id") Long id){
+    public ResponseEntity<?> buscarPorId(@PathVariable("id") Long id, Authentication authentication){
         try {
-            var usuario = userRepository.getReferenceById(id);
+            var usuario = (User) authentication.getPrincipal();
+            if(!usuario.getId().equals(id)){
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Você não pode acessar outro usuário!");
+            }
             return ResponseEntity.ok(new DetalhesUserDto(usuario));
         } catch (EmptyResultDataAccessException e){
             return ResponseEntity.notFound().build();
@@ -119,13 +125,16 @@ public class UserController {
             @ApiResponse(responseCode = "404", description = "Usuário não encontrado ou formato Json incorreto."),
             @ApiResponse(responseCode = "500", description = "Erro de servidor.")
     })
-    public ResponseEntity<DetalhesUserDto> atualizar(@PathVariable("id") Long id, @RequestBody @Valid AtualizarUserDto userDto){
+    public ResponseEntity<?> atualizar(@PathVariable("id") Long id, @RequestBody @Valid AtualizarUserDto userDto, Authentication authentication){
         try {
-            var usuario = userRepository.getReferenceById(id);
+            var usuario = (User) authentication.getPrincipal();
+            if(!usuario.getId().equals(id)){
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Você não pode atualizar outro usuário!");
+            }
             usuario.atualizarUser(userDto.nome(), passwordEncoder.encode(userDto.password()), userDto.userType(), userDto.cpfCnpj());
             userRepository.save(usuario);
             return ResponseEntity.ok(new DetalhesUserDto(usuario));
-        } catch (EmptyResultDataAccessException e){
+        } catch (EntityNotFoundException e){
             return ResponseEntity.notFound().build();
         }
     }
@@ -139,11 +148,15 @@ public class UserController {
             @ApiResponse(responseCode = "404", description = "Usuário não encontrado. ID incorreto."),
             @ApiResponse(responseCode = "500", description = "Erro de servidor.")
     })
-    public ResponseEntity<Void> excluirUsuario(@PathVariable("id") Long id){
+    public ResponseEntity<?> excluirUsuario(@PathVariable("id") Long id, Authentication authentication){
         try {
+            var usuario = (User) authentication.getPrincipal();
+            if(!usuario.getId().equals(id)){
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Você não pode excluir outro usuário!");
+            }
             userRepository.deleteById(id);
             return ResponseEntity.noContent().build();
-        } catch (EmptyResultDataAccessException e){
+        } catch (EntityNotFoundException e){
             return ResponseEntity.notFound().build();
         }
     }
@@ -160,15 +173,18 @@ public class UserController {
             @ApiResponse(responseCode = "404", description = "Usuário não encontrado ou formato Json incorreto"),
             @ApiResponse(responseCode = "500", description = "Erro de servidor.")
     })
-    public ResponseEntity<DetalhesContaDto> cadastrarConta(@PathVariable("id") Long id, @RequestBody @Valid CadastrarContaDto contaDto, UriComponentsBuilder uriBuilder){
+    public ResponseEntity<?> cadastrarConta(@PathVariable("id") Long id, @RequestBody @Valid CadastrarContaDto contaDto, UriComponentsBuilder uriBuilder, Authentication authentication){
         try {
-            var usuario = userRepository.getReferenceById(id);
-            var conta = new Conta(contaDto, usuario);
-            usuario.setConta(conta);
+            var user = (User) authentication.getPrincipal();
+            if(!user.getId().equals(id)){
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Você não pode cadastrar uma conta para outro usuário!");
+            }
+            var conta = new Conta(contaDto, user);
+            user.setConta(conta);
             contaRepository.save(conta);
             var uri = uriBuilder.path("conta/{id}").buildAndExpand(conta.getId()).toUri();
             return ResponseEntity.created(uri).body(new DetalhesContaDto(conta));
-        } catch (EmptyResultDataAccessException e){
+        } catch (EntityNotFoundException e){
             return ResponseEntity.notFound().build();
         }
     }
@@ -185,15 +201,18 @@ public class UserController {
             @ApiResponse(responseCode = "404", description = "Usuário não encontrado ou formato Json incorreto."),
             @ApiResponse(responseCode = "500", description = "Erro de servidor.")
     })
-    public ResponseEntity<DetalhesEnderecoDto> cadastrarEndereco(@PathVariable("id") Long id, @RequestBody @Valid CadastrarEnderecoDto enderecoDto, UriComponentsBuilder uriBuilder){
+    public ResponseEntity<?> cadastrarEndereco(@PathVariable("id") Long id, @RequestBody @Valid CadastrarEnderecoDto enderecoDto, UriComponentsBuilder uriBuilder, Authentication authentication){
         try {
-            var usuario = userRepository.getReferenceById(id);
-            var endereco = new Endereco(enderecoDto, usuario);
-            usuario.setEndereco(endereco);
+            var user = (User) authentication.getPrincipal();
+            if(!user.getId().equals(id)){
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Você não pode cadastrar um endereço para outro usuário!");
+            }
+            var endereco = new Endereco(enderecoDto, user);
+            user.setEndereco(endereco);
             enderecoRepository.save(endereco);
             var uri = uriBuilder.path("endereco/{id}").buildAndExpand(endereco.getId()).toUri();
             return ResponseEntity.created(uri).body(new DetalhesEnderecoDto(endereco));
-        } catch (EmptyResultDataAccessException e){
+        } catch (EntityNotFoundException e){
             return ResponseEntity.notFound().build();
         }
     }
@@ -212,15 +231,19 @@ public class UserController {
             @ApiResponse(responseCode = "404", description = "Usuário não encontrado ou formato Json incorreto"),
             @ApiResponse(responseCode = "500", description = "Erro de servidor.")
     })
-    public ResponseEntity<DetalhesTelefoneDto> cadastrarTelefone(@PathVariable("id") Long id, @RequestBody @Valid CadastrarTelefoneDto telefoneDto, UriComponentsBuilder uriBuilder){
+    public ResponseEntity<?> cadastrarTelefone(@PathVariable("id") Long id, @RequestBody @Valid CadastrarTelefoneDto telefoneDto, UriComponentsBuilder uriBuilder, Authentication authentication){
         try {
-            var usuario = userRepository.getReferenceById(id);
+            var user = (User) authentication.getPrincipal();
+            if(!user.getId().equals(id)){
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Você não pode cadastrar o telefone de outro usuário!");
+            }
             var telefone = new Telefone(telefoneDto);
-            usuario.adicionarTelefone(telefone);
+            telefone.setUser(user);
             telefoneRepository.save(telefone);
+            user.adicionarTelefone(telefone);
             var uri = uriBuilder.path("telefone/{id}").buildAndExpand(telefone.getId()).toUri();
             return ResponseEntity.created(uri).body(new DetalhesTelefoneDto(telefone));
-        } catch (EmptyResultDataAccessException e){
+        } catch (EntityNotFoundException e){
             return ResponseEntity.notFound().build();
         }
     }

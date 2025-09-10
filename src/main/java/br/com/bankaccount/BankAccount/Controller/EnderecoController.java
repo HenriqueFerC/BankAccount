@@ -3,6 +3,7 @@ package br.com.bankaccount.BankAccount.Controller;
 import br.com.bankaccount.BankAccount.dto.EnderecoDto.AtualizarEnderecoDto;
 import br.com.bankaccount.BankAccount.dto.EnderecoDto.DetalhesEnderecoDto;
 import br.com.bankaccount.BankAccount.Repository.EnderecoRepository;
+import br.com.bankaccount.BankAccount.model.User;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -13,7 +14,9 @@ import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -24,7 +27,7 @@ public class EnderecoController {
     @Autowired
     private EnderecoRepository enderecoRepository;
 
-    @GetMapping("id")
+    @GetMapping("{id}")
     @Operation(summary = "Buscar Endereço", description = "Busca o Endereço com base no ID selecionado na URL.")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Endereço buscado com sucesso!",
@@ -32,9 +35,16 @@ public class EnderecoController {
             @ApiResponse(responseCode = "403", description = "Não autorizado ou token invalido."),
             @ApiResponse(responseCode = "404", description = "Endereço não encontrado!")
     })
-    public ResponseEntity<DetalhesEnderecoDto> buscarPorId(@PathVariable("id") Long id){
+    public ResponseEntity<?> buscarPorId(@PathVariable("id") Long id, Authentication authentication){
         try {
             var endereco = enderecoRepository.getReferenceById(id);
+
+            var user = (User) authentication.getPrincipal();
+
+            if(!user.getId().equals(endereco.getUser().getId())){
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Você não pode buscar um endereço de outro usuário!");
+            }
+
             return ResponseEntity.ok(new DetalhesEnderecoDto(endereco));
         } catch (EmptyResultDataAccessException e){
             return ResponseEntity.notFound().build();
@@ -51,9 +61,16 @@ public class EnderecoController {
             @ApiResponse(responseCode = "404", description = "Endereço não encontrado para atualizar ou formato incorreto."),
             @ApiResponse(responseCode = "500", description = "Erro de servidor!")
     })
-    public ResponseEntity<DetalhesEnderecoDto> atualizarEndereco(@PathVariable("id") Long id, @RequestBody @Valid AtualizarEnderecoDto enderecoDto){
+    public ResponseEntity<?> atualizarEndereco(@PathVariable("id") Long id, @RequestBody @Valid AtualizarEnderecoDto enderecoDto, Authentication authentication){
         try {
             var endereco = enderecoRepository.getReferenceById(id);
+
+            var user = (User) authentication.getPrincipal();
+
+            if(!user.getId().equals(endereco.getUser().getId())){
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Você não pode atualizar um endereço que não é seu!");
+            }
+
             endereco.atualizarEndereco(enderecoDto);
             return ResponseEntity.ok(new DetalhesEnderecoDto(endereco));
         } catch (EmptyResultDataAccessException e){
@@ -70,11 +87,16 @@ public class EnderecoController {
             @ApiResponse(responseCode = "404", description = "ID do Endereço não encontrado!"),
             @ApiResponse(responseCode = "500", description = "Erro de servidor!")
     })
-    public ResponseEntity<Void> excluirEndereco(@PathVariable("id") Long id){
+    public ResponseEntity<?> excluirEndereco(@PathVariable("id") Long id, Authentication authentication){
         try {
             var endereco = enderecoRepository.getReferenceById(id);
-            var usuario = endereco.getUser();
-            usuario.setEndereco(null);
+
+            var user = (User) authentication.getPrincipal();
+
+            if(!user.getId().equals(endereco.getUser().getId())){
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Você não pode excluir um endereço que não é seu!");
+            }
+
             enderecoRepository.deleteById(id);
             return ResponseEntity.noContent().build();
         } catch (EmptyResultDataAccessException e){

@@ -2,6 +2,7 @@ package br.com.bankaccount.BankAccount.Controller;
 
 import br.com.bankaccount.BankAccount.dto.TransacaoDto.DetalhesTransacaoDto;
 import br.com.bankaccount.BankAccount.Repository.TransacaoRepository;
+import br.com.bankaccount.BankAccount.model.User;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -13,6 +14,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -66,9 +68,10 @@ public class TransacaoController {
             @ApiResponse(responseCode = "404", description = "Transação não encontrada. ID incorreto."),
             @ApiResponse(responseCode = "500", description = "Erro de servidor.")
     })
-    public ResponseEntity<DetalhesTransacaoDto> buscarPorId(@PathVariable("id") Long id){
+    public ResponseEntity<?> buscarPorId(@PathVariable("id") Long id){
         try {
             var transacao = transacaoRepository.getReferenceById(id);
+
             return ResponseEntity.ok(new DetalhesTransacaoDto(transacao));
         } catch (EmptyResultDataAccessException e){
             return ResponseEntity.notFound().build();

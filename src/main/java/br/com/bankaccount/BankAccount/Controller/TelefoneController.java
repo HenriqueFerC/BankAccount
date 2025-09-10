@@ -3,6 +3,7 @@ package br.com.bankaccount.BankAccount.Controller;
 import br.com.bankaccount.BankAccount.dto.TelefoneDto.AtualizarTelefoneDto;
 import br.com.bankaccount.BankAccount.dto.TelefoneDto.DetalhesTelefoneDto;
 import br.com.bankaccount.BankAccount.Repository.TelefoneRepository;
+import br.com.bankaccount.BankAccount.model.User;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -13,7 +14,9 @@ import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -34,9 +37,16 @@ public class TelefoneController {
             @ApiResponse(responseCode = "404", description = "Telefone não encontrado ou formato Json incorreto."),
             @ApiResponse(responseCode = "500", description = "Erro de servidor.")
     })
-    public ResponseEntity<DetalhesTelefoneDto> atualizarTelefone(@PathVariable("id") Long id, @RequestBody @Valid AtualizarTelefoneDto telefoneDto){
+    public ResponseEntity<?> atualizarTelefone(@PathVariable("id") Long id, @RequestBody @Valid AtualizarTelefoneDto telefoneDto, Authentication authentication){
         try {
             var telefone = telefoneRepository.getReferenceById(id);
+
+            var user = (User) authentication.getPrincipal();
+
+            if(!user.getId().equals(telefone.getUser().getId())){
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Você não pode atualizar o telefone de outro usuário!");
+            }
+
             telefone.atualizarTelefone(telefoneDto);
             telefoneRepository.save(telefone);
             return ResponseEntity.ok(new DetalhesTelefoneDto(telefone));
@@ -54,8 +64,15 @@ public class TelefoneController {
             @ApiResponse(responseCode = "404", description = "Telefone não encontrado. ID incorreto."),
             @ApiResponse(responseCode = "500", description = "Erro de servidor.")
     })
-    public ResponseEntity<Void> excluirTelefone(@PathVariable("id") Long id){
+    public ResponseEntity<?> excluirTelefone(@PathVariable("id") Long id, Authentication authentication){
         try {
+            var telefone = telefoneRepository.getReferenceById(id);
+            var user = (User) authentication.getPrincipal();
+
+            if(!user.getId().equals(telefone.getUser().getId())){
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Você não pode excluir o telefone de outra pessoa!");
+            }
+
             telefoneRepository.deleteById(id);
             return ResponseEntity.noContent().build();
         } catch (EmptyResultDataAccessException e){
