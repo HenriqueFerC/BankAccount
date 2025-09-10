@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 public record DetalhesTransacaoDto(TipoTransacao tipoTransacao, LocalDateTime dataTransacao, BigDecimal valor) {
-    public DetalhesTransacaoDto(Transacao transacao){
+    public DetalhesTransacaoDto(Transacao transacao) {
         this(transacao.getTipoTransacao(), transacao.getDataTransacao(), transacao.getValor());
     }
 }

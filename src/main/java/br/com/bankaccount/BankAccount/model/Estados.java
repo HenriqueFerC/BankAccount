@@ -33,12 +33,12 @@ public enum Estados {
 
     private String label;
 
-    Estados(String label){
+    Estados(String label) {
         this.label = label;
     }
 
     @JsonValue
-    public String getLabel(){
+    public String getLabel() {
         return label;
     }
 }

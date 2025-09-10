@@ -9,12 +9,12 @@ public enum TipoConta {
 
     private String label;
 
-    TipoConta(String label){
+    TipoConta(String label) {
         this.label = label;
     }
 
     @JsonValue
-    public String getLabel(){
+    public String getLabel() {
         return label;
     }
 }

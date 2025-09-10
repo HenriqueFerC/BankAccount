@@ -19,7 +19,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 public class SecurityConfigurations {
 
-    private static final String[] SWAGGER_WHITELIST = { "*/swagger-ui/**", "/v3/api-docs/**" };
+    private static final String[] SWAGGER_WHITELIST = {"*/swagger-ui/**", "/v3/api-docs/**"};
 
     @Autowired
     private SecurityFilter securityFilter;
@@ -44,7 +44,7 @@ public class SecurityConfigurations {
     }
 
     @Bean
-    public PasswordEncoder passwordEncoder(){
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 

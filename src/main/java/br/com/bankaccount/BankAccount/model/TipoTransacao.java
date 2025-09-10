@@ -7,12 +7,12 @@ public enum TipoTransacao {
 
     private String label;
 
-    TipoTransacao(String label){
+    TipoTransacao(String label) {
         this.label = label;
     }
 
     @JsonValue
-    private String getLabel(){
+    private String getLabel() {
         return label;
     }
 }

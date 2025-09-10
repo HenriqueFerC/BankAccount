@@ -7,12 +7,12 @@ public enum UserType {
 
     private String label;
 
-    UserType(String label){
+    UserType(String label) {
         this.label = label;
     }
 
     @JsonValue
-    public String getLabel(){
+    public String getLabel() {
         return label;
     }
 }

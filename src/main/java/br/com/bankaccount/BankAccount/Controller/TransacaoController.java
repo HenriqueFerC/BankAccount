@@ -22,7 +22,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("transacao")
-@Tag(name = "transacao", description = "API do modelo transação, métodos Buscar Todos e Buscar por Data")
+@Tag(name = "transacao", description = "API do modelo transação, métodos Buscar Todos, Buscar por Data e Buscar Por ID")
 public class TransacaoController {
 
     @Autowired
@@ -32,12 +32,12 @@ public class TransacaoController {
     @Operation(summary = "Buscar Transação por Data", description = "Busca as transações com base no intervalo das datas da URL.")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Transações buscadas com sucesso!",
-            content = @Content(schema = @Schema(implementation = DetalhesTransacaoDto.class), mediaType = "application/json")),
+                    content = @Content(schema = @Schema(implementation = DetalhesTransacaoDto.class), mediaType = "application/json")),
             @ApiResponse(responseCode = "403", description = "Não autorizado ou token invalido."),
             @ApiResponse(responseCode = "404", description = "Transações não encontradas!"),
             @ApiResponse(responseCode = "500", description = "Erro de Servidor.")
     })
-    public ResponseEntity<Page<DetalhesTransacaoDto>> buscarPorData(@RequestParam("data-inicial") LocalDateTime dataInicial, @RequestParam("data-final") LocalDateTime dataFinal, Pageable pageable){
+    public ResponseEntity<Page<DetalhesTransacaoDto>> buscarPorData(@RequestParam("data-inicial") LocalDateTime dataInicial, @RequestParam("data-final") LocalDateTime dataFinal, Pageable pageable) {
         var transacoes = transacaoRepository.findByDataTransacaoBetween(dataInicial, dataFinal, pageable).map(DetalhesTransacaoDto::new);
         return ResponseEntity.ok(transacoes);
     }
@@ -46,14 +46,14 @@ public class TransacaoController {
     @Operation(summary = "Buscar Transações", description = "Busca todas as transações do banco de dados.")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Lista de Transações buscadas com sucesso!",
-            content = @Content(schema = @Schema(implementation = DetalhesTransacaoDto.class), mediaType = "application/json")),
+                    content = @Content(schema = @Schema(implementation = DetalhesTransacaoDto.class), mediaType = "application/json")),
             @ApiResponse(responseCode = "403", description = "Não autorizado ou token invalido."),
             @ApiResponse(responseCode = "404", description = "Nenhuma transação foi encontrada."),
             @ApiResponse(responseCode = "500", description = "Erro de servidor.")
     })
-    public ResponseEntity<List<DetalhesTransacaoDto>> listarTransacoes(Pageable pageable){
+    public ResponseEntity<List<DetalhesTransacaoDto>> listarTransacoes(Pageable pageable) {
         var lista = transacaoRepository.findAll(pageable).stream().map(DetalhesTransacaoDto::new).toList();
-        if(lista.isEmpty()){
+        if (lista.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(lista);
@@ -63,17 +63,17 @@ public class TransacaoController {
     @Operation(summary = "Buscar Transação por ID", description = "Busca uma transação com base no ID da URL.")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Transação buscada com sucesso!",
-            content = @Content(schema = @Schema(implementation = DetalhesTransacaoDto.class), mediaType = "application/json")),
+                    content = @Content(schema = @Schema(implementation = DetalhesTransacaoDto.class), mediaType = "application/json")),
             @ApiResponse(responseCode = "403", description = "Não autorizado ou token invalido."),
             @ApiResponse(responseCode = "404", description = "Transação não encontrada. ID incorreto."),
             @ApiResponse(responseCode = "500", description = "Erro de servidor.")
     })
-    public ResponseEntity<?> buscarPorId(@PathVariable("id") Long id){
+    public ResponseEntity<?> buscarPorId(@PathVariable("id") Long id) {
         try {
             var transacao = transacaoRepository.getReferenceById(id);
 
             return ResponseEntity.ok(new DetalhesTransacaoDto(transacao));
-        } catch (EmptyResultDataAccessException e){
+        } catch (EmptyResultDataAccessException e) {
             return ResponseEntity.notFound().build();
         }
     }

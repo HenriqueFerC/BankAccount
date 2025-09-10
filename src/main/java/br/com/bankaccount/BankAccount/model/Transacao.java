@@ -46,13 +46,14 @@ public class Transacao {
             joinColumns = @JoinColumn(name = "ID_TRANSACAO"),
             inverseJoinColumns = @JoinColumn(name = "ID_CONTA")
     )
-    private List<Conta> contas = new ArrayList<>();;
+    private List<Conta> contas = new ArrayList<>();
+    ;
 
-    public void adicionarConta(Conta conta){
+    public void adicionarConta(Conta conta) {
         contas.add(conta);
     }
 
-    public Transacao(CadastrarTransacaoDto transacaoDto){
+    public Transacao(CadastrarTransacaoDto transacaoDto) {
         tipoTransacao = transacaoDto.tipoTransacao();
         valor = transacaoDto.valor();
     }

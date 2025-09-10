@@ -26,7 +26,7 @@ public class SecurityFilter extends OncePerRequestFilter {
 
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String tokenJwt = request.getHeader("Authorization");
-        if (tokenJwt != null){
+        if (tokenJwt != null) {
             tokenJwt = tokenJwt.replace("Bearer ", "");
 
             String cpfCnpj = tokenService.getSubject(tokenJwt);

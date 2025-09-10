@@ -50,22 +50,22 @@ public class User implements UserDetails {
     @OneToOne(mappedBy = "user", cascade = CascadeType.DETACH)
     private Conta conta;
 
-    public void adicionarTelefone(Telefone telefone){
+    public void adicionarTelefone(Telefone telefone) {
         telefones.add(telefone);
     }
 
-    public void removerTelefone(Telefone telefone){
+    public void removerTelefone(Telefone telefone) {
         telefones.remove(telefone);
     }
 
-    public User(String nome, String password, UserType userType, String cpfCnpj){
+    public User(String nome, String password, UserType userType, String cpfCnpj) {
         this.nome = nome;
         this.password = password;
         this.userType = userType;
         this.cpfCnpj = cpfCnpj;
     }
 
-    public void atualizarUser(String nome, String password, UserType userType, String cpfCnpj){
+    public void atualizarUser(String nome, String password, UserType userType, String cpfCnpj) {
         this.nome = nome;
         this.password = password;
         this.userType = userType;
@@ -73,37 +73,37 @@ public class User implements UserDetails {
     }
 
     @Override
-    public Collection<? extends GrantedAuthority> getAuthorities(){
+    public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(userType.name()));
     }
 
     @Override
-    public String getUsername(){
+    public String getUsername() {
         return nome;
     }
 
     @Override
-    public String getPassword(){
+    public String getPassword() {
         return password;
     }
 
     @Override
-    public boolean isAccountNonExpired(){
+    public boolean isAccountNonExpired() {
         return true;
     }
 
     @Override
-    public boolean isAccountNonLocked(){
+    public boolean isAccountNonLocked() {
         return true;
     }
 
     @Override
-    public boolean isCredentialsNonExpired(){
+    public boolean isCredentialsNonExpired() {
         return true;
     }
 
     @Override
-    public boolean isEnabled(){
+    public boolean isEnabled() {
         return true;
     }
 }

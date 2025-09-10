@@ -45,7 +45,7 @@ public class Endereco {
     @JoinColumn(name = "ID_USER")
     private User user;
 
-    public Endereco(CadastrarEnderecoDto enderecoDto, User user){
+    public Endereco(CadastrarEnderecoDto enderecoDto, User user) {
         estado = enderecoDto.estado();
         cidade = enderecoDto.cidade();
         bairro = enderecoDto.bairro();
@@ -55,7 +55,7 @@ public class Endereco {
         this.user = user;
     }
 
-    public void atualizarEndereco(AtualizarEnderecoDto enderecoDto){
+    public void atualizarEndereco(AtualizarEnderecoDto enderecoDto) {
         estado = enderecoDto.estado();
         cidade = enderecoDto.cidade();
         bairro = enderecoDto.bairro();

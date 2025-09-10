@@ -80,7 +80,7 @@ Observação: Exclusão em cascata, excluindo o usuário, todos os relacionados 
 ______________________________________
 ### Cadastro de Conta
 
-`/user/cadastrarConta/{idDoUsuário}`.
+`/conta/cadastrarConta`.
 
 * **Requer Token.**
 
@@ -129,7 +129,7 @@ JSON:
 ______________________________________
 ### Cadastro de Endereço
 
-`user/cadastrarEndereco/{idDoUsuário}`.
+`endereco/cadastrarEndereco`.
 
 * **Requer Token.**
 
@@ -179,7 +179,7 @@ ______________________________________
 ______________________________________
 ### Cadastro de Telefone
 
-`/user/cadastrarTelefone/{id}`.
+`/telefone/cadastrarTelefone`.
 
 * **Requer Token.**
 

@@ -40,8 +40,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("user")
-@Tag(name = "user", description = "API do modelo Usuário, métodos de Buscar, Cadastrar, Atualizar, Listar, Excluir." +
-        " Métodos para Cadastrar telefone, conta e endereço já relacionado à classe user")
+@Tag(name = "user", description = "API do modelo Usuário, métodos de Buscar, Cadastrar, Atualizar, Listar, Excluir.")
 public class UserController {
 
     @Autowired
@@ -64,11 +63,11 @@ public class UserController {
     @Operation(summary = "Cadastrar Usuário", description = "Cadastra o Usuário com base no JSON enviado para a URL.")
     @ApiResponses({
             @ApiResponse(responseCode = "201", description = "Usuário cadastrado com sucesso!",
-            content = @Content(schema = @Schema(implementation = DetalhesUserDto.class), mediaType = "application/json")),
+                    content = @Content(schema = @Schema(implementation = DetalhesUserDto.class), mediaType = "application/json")),
             @ApiResponse(responseCode = "404", description = "Formato do Json incorreto."),
             @ApiResponse(responseCode = "500", description = "Erro de servidor.")
     })
-    public ResponseEntity<DetalhesUserDto> cadastrar(@RequestBody @Valid CadastrarUserDto userDto, UriComponentsBuilder uriBuilder){
+    public ResponseEntity<DetalhesUserDto> cadastrar(@RequestBody @Valid CadastrarUserDto userDto, UriComponentsBuilder uriBuilder) {
         var usuario = new User(userDto.nome(), passwordEncoder.encode(userDto.password()), userDto.userType(), userDto.cpfCnpj());
         userRepository.save(usuario);
         var uri = uriBuilder.path("user/{id}").buildAndExpand(usuario.getId()).toUri();
@@ -76,24 +75,23 @@ public class UserController {
     }
 
 
-
     @GetMapping("{id}")
     @Operation(summary = "Buscar Usuário por ID", description = "Busca o usuário com base no ID da URL.")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Usuário buscado com sucesso!",
-            content = @Content(schema = @Schema(implementation = DetalhesUserDto.class), mediaType = "application/json")),
+                    content = @Content(schema = @Schema(implementation = DetalhesUserDto.class), mediaType = "application/json")),
             @ApiResponse(responseCode = "403", description = "Não autorizado ou token invalido."),
             @ApiResponse(responseCode = "404", description = "Usuário não encontrado. ID incorreto."),
             @ApiResponse(responseCode = "500", description = "Erro de servidor.")
     })
-    public ResponseEntity<?> buscarPorId(@PathVariable("id") Long id, Authentication authentication){
+    public ResponseEntity<?> buscarPorId(@PathVariable("id") Long id, Authentication authentication) {
         try {
             var usuario = (User) authentication.getPrincipal();
-            if(!usuario.getId().equals(id)){
+            if (!usuario.getId().equals(id)) {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Você não pode acessar outro usuário!");
             }
             return ResponseEntity.ok(new DetalhesUserDto(usuario));
-        } catch (EmptyResultDataAccessException e){
+        } catch (EmptyResultDataAccessException e) {
             return ResponseEntity.notFound().build();
         }
     }
@@ -102,39 +100,36 @@ public class UserController {
     @Operation(summary = "Listar Usuários", description = "Lista os usuários do banco de dados.")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Lista de Usuários buscada com sucesso!",
-            content = @Content(schema = @Schema(implementation = DetalhesUserDto.class), mediaType = "application/json")),
+                    content = @Content(schema = @Schema(implementation = DetalhesUserDto.class), mediaType = "application/json")),
             @ApiResponse(responseCode = "403", description = "Não autorizado ou token invalido."),
             @ApiResponse(responseCode = "404", description = "Nenhum usuário foi encontrado."),
             @ApiResponse(responseCode = "500", description = "Erro de servidor.")
     })
-    public ResponseEntity<List<DetalhesUserDto>> listarUsuarios(Pageable pageable){
+    public ResponseEntity<List<DetalhesUserDto>> listarUsuarios(Pageable pageable) {
         var lista = userRepository.findAll(pageable).stream().map(DetalhesUserDto::new).toList();
-        if(lista.isEmpty()){
+        if (lista.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(lista);
     }
 
-    @PutMapping("atualizar/{id}")
+    @PutMapping("atualizar")
     @Transactional
     @Operation(summary = "Atualizar Usuário", description = "Atualiza o Usuário com base no ID da URL.")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Usuário atualizado com sucesso!",
-            content = @Content(schema = @Schema(implementation = DetalhesUserDto.class), mediaType = "application/json")),
+                    content = @Content(schema = @Schema(implementation = DetalhesUserDto.class), mediaType = "application/json")),
             @ApiResponse(responseCode = "403", description = "Não autorizado ou token invalido."),
             @ApiResponse(responseCode = "404", description = "Usuário não encontrado ou formato Json incorreto."),
             @ApiResponse(responseCode = "500", description = "Erro de servidor.")
     })
-    public ResponseEntity<?> atualizar(@PathVariable("id") Long id, @RequestBody @Valid AtualizarUserDto userDto, Authentication authentication){
+    public ResponseEntity<?> atualizar(@RequestBody @Valid AtualizarUserDto userDto, Authentication authentication) {
         try {
             var usuario = (User) authentication.getPrincipal();
-            if(!usuario.getId().equals(id)){
-                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Você não pode atualizar outro usuário!");
-            }
             usuario.atualizarUser(userDto.nome(), passwordEncoder.encode(userDto.password()), userDto.userType(), userDto.cpfCnpj());
             userRepository.save(usuario);
             return ResponseEntity.ok(new DetalhesUserDto(usuario));
-        } catch (EntityNotFoundException e){
+        } catch (EntityNotFoundException e) {
             return ResponseEntity.notFound().build();
         }
     }
@@ -148,104 +143,16 @@ public class UserController {
             @ApiResponse(responseCode = "404", description = "Usuário não encontrado. ID incorreto."),
             @ApiResponse(responseCode = "500", description = "Erro de servidor.")
     })
-    public ResponseEntity<?> excluirUsuario(@PathVariable("id") Long id, Authentication authentication){
+    public ResponseEntity<?> excluirUsuario(@PathVariable("id") Long id, Authentication authentication) {
         try {
             var usuario = (User) authentication.getPrincipal();
-            if(!usuario.getId().equals(id)){
+            if (!usuario.getId().equals(id)) {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Você não pode excluir outro usuário!");
             }
-            userRepository.deleteById(id);
+            userRepository.delete(usuario);
             return ResponseEntity.noContent().build();
-        } catch (EntityNotFoundException e){
+        } catch (EntityNotFoundException e) {
             return ResponseEntity.notFound().build();
         }
     }
-
-    //Método para criação de Conta Corrente abaixo
-
-    @PostMapping("cadastrarConta/{id}")
-    @Transactional
-    @Operation(summary = "Cadastrar Conta", description = "Cadastra a Conta com base no ID do usuário, já relacionando-os.")
-    @ApiResponses({
-            @ApiResponse(responseCode = "201", description = "Conta criada com sucesso",
-            content = @Content(schema = @Schema(implementation = DetalhesContaDto.class), mediaType = "application/json")),
-            @ApiResponse(responseCode = "403", description = "Não autorizado ou token invalido."),
-            @ApiResponse(responseCode = "404", description = "Usuário não encontrado ou formato Json incorreto"),
-            @ApiResponse(responseCode = "500", description = "Erro de servidor.")
-    })
-    public ResponseEntity<?> cadastrarConta(@PathVariable("id") Long id, @RequestBody @Valid CadastrarContaDto contaDto, UriComponentsBuilder uriBuilder, Authentication authentication){
-        try {
-            var user = (User) authentication.getPrincipal();
-            if(!user.getId().equals(id)){
-                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Você não pode cadastrar uma conta para outro usuário!");
-            }
-            var conta = new Conta(contaDto, user);
-            user.setConta(conta);
-            contaRepository.save(conta);
-            var uri = uriBuilder.path("conta/{id}").buildAndExpand(conta.getId()).toUri();
-            return ResponseEntity.created(uri).body(new DetalhesContaDto(conta));
-        } catch (EntityNotFoundException e){
-            return ResponseEntity.notFound().build();
-        }
-    }
-
-    //Método para criação de Endereco abaixo
-
-    @PostMapping("cadastrarEndereco/{id}")
-    @Transactional
-    @Operation(summary = "Cadastrar Endereço", description = "Cadastra o Endereço com base no ID do Usuário, já relacionando-os.")
-    @ApiResponses({
-            @ApiResponse(responseCode = "201", description = "Endereço cadastrado com sucesso!",
-            content = @Content(schema = @Schema(implementation = DetalhesEnderecoDto.class), mediaType = "application/json")),
-            @ApiResponse(responseCode = "403", description = "Não autorizado ou token invalido."),
-            @ApiResponse(responseCode = "404", description = "Usuário não encontrado ou formato Json incorreto."),
-            @ApiResponse(responseCode = "500", description = "Erro de servidor.")
-    })
-    public ResponseEntity<?> cadastrarEndereco(@PathVariable("id") Long id, @RequestBody @Valid CadastrarEnderecoDto enderecoDto, UriComponentsBuilder uriBuilder, Authentication authentication){
-        try {
-            var user = (User) authentication.getPrincipal();
-            if(!user.getId().equals(id)){
-                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Você não pode cadastrar um endereço para outro usuário!");
-            }
-            var endereco = new Endereco(enderecoDto, user);
-            user.setEndereco(endereco);
-            enderecoRepository.save(endereco);
-            var uri = uriBuilder.path("endereco/{id}").buildAndExpand(endereco.getId()).toUri();
-            return ResponseEntity.created(uri).body(new DetalhesEnderecoDto(endereco));
-        } catch (EntityNotFoundException e){
-            return ResponseEntity.notFound().build();
-        }
-    }
-
-
-    //Método para criação de Telefone abaixo
-
-    @PostMapping("cadastrarTelefone/{id}")
-    @Transactional
-    @Operation(summary = "Cadastrar Telefone", description = "Cadastra o Telefone com base no ID do Usuário, já relacionando-os" +
-            "(Um usuário pode ter vários telefones).")
-    @ApiResponses({
-            @ApiResponse(responseCode = "201", description = "Telefone cadastrado com sucesso",
-            content = @Content(schema = @Schema(implementation = DetalhesTelefoneDto.class), mediaType = "application/json")),
-            @ApiResponse(responseCode = "403", description = "Não autorizado ou token invalido."),
-            @ApiResponse(responseCode = "404", description = "Usuário não encontrado ou formato Json incorreto"),
-            @ApiResponse(responseCode = "500", description = "Erro de servidor.")
-    })
-    public ResponseEntity<?> cadastrarTelefone(@PathVariable("id") Long id, @RequestBody @Valid CadastrarTelefoneDto telefoneDto, UriComponentsBuilder uriBuilder, Authentication authentication){
-        try {
-            var user = (User) authentication.getPrincipal();
-            if(!user.getId().equals(id)){
-                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Você não pode cadastrar o telefone de outro usuário!");
-            }
-            var telefone = new Telefone(telefoneDto);
-            telefone.setUser(user);
-            telefoneRepository.save(telefone);
-            user.adicionarTelefone(telefone);
-            var uri = uriBuilder.path("telefone/{id}").buildAndExpand(telefone.getId()).toUri();
-            return ResponseEntity.created(uri).body(new DetalhesTelefoneDto(telefone));
-        } catch (EntityNotFoundException e){
-            return ResponseEntity.notFound().build();
-        }
-    }
-
 }

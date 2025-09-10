@@ -22,5 +22,5 @@ public record CadastrarContaDto(
         @Schema(description = "Tipo de Conta precisa ser uma das opções possíveis. Exemplo: Conta Corrente (CC)")
         @NotNull(message = "Tipo de Conta precisa ser definida!")
         TipoConta tipoConta
-    ) {
+) {
 }

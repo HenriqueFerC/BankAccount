@@ -43,22 +43,22 @@ public class Conta {
     @ManyToMany(mappedBy = "contas", cascade = CascadeType.DETACH)
     private List<Transacao> transacoes = new ArrayList<>();
 
-    public void adicionarTransacao(Transacao transacao){
+    public void adicionarTransacao(Transacao transacao) {
         transacoes.add(transacao);
     }
 
-    public Conta(CadastrarContaDto contaDto, User user){
+    public Conta(CadastrarContaDto contaDto, User user) {
         numero = contaDto.numero();
         saldo = contaDto.saldo();
         tipoConta = contaDto.tipoConta();
         this.user = user;
     }
 
-    public void atualizarConta(AtualizarContaDto contaDto){
+    public void atualizarConta(AtualizarContaDto contaDto) {
         tipoConta = contaDto.tipoConta();
     }
 
-    public void transacao(Conta conta1, Conta conta2, BigDecimal valor){
+    public void transacao(Conta conta1, Conta conta2, BigDecimal valor) {
         var valor2 = conta2.getSaldo().add(valor);
         var valor1 = conta1.getSaldo().subtract(valor);
         conta1.setSaldo(valor1);

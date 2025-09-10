@@ -36,12 +36,12 @@ public class AutenticacaoController {
             " validando o Token caso esteja correto.")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Token gerado com sucesso!",
-            content = @Content(schema = @Schema(implementation = TokenJwtDto.class), mediaType = "application/json")),
+                    content = @Content(schema = @Schema(implementation = TokenJwtDto.class), mediaType = "application/json")),
             @ApiResponse(responseCode = "404", description = "Dados inválidos ou má formatação json!"),
             @ApiResponse(responseCode = "500", description = "Erro de servidor.")
     }
     )
-    public ResponseEntity<TokenJwtDto> login(@RequestBody @Valid DadosLoginDto loginDto){
+    public ResponseEntity<TokenJwtDto> login(@RequestBody @Valid DadosLoginDto loginDto) {
         var autenticacaoToken = new UsernamePasswordAuthenticationToken(loginDto.cpfCnpj(), loginDto.password());
         var authenticate = authenticationManager.authenticate(autenticacaoToken);
         var token = tokenService.gerarToken((User) authenticate.getPrincipal());

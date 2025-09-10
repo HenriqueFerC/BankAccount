@@ -17,11 +17,11 @@ public class TokenService {
     @Value("${api.token.secret}")
     private String senha;
 
-    public String getSubject(String tokenJwt){
+    public String getSubject(String tokenJwt) {
         try {
             Algorithm algorithm = Algorithm.HMAC256(senha);
             return JWT.require(algorithm).withIssuer("BankAccount").build().verify(tokenJwt).getSubject();
-        } catch(JWTVerificationException e){
+        } catch (JWTVerificationException e) {
             throw new RuntimeException("Não foi possível validar o token JWT");
         }
     }
@@ -34,7 +34,7 @@ public class TokenService {
                     .withSubject(user.getCpfCnpj())
                     .withExpiresAt(Instant.now().plus(Duration.ofHours(1)))
                     .sign(algorithm);
-        } catch (JWTCreationException e){
+        } catch (JWTCreationException e) {
             throw new RuntimeException("Erro ao criar o token JWT");
         }
     }
