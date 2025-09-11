@@ -42,7 +42,7 @@ public class Transacao {
 
     @ManyToMany
     @JoinTable(
-            name = "Conta_Transacao",
+            name = "TB_CONTA_TRANSACAO",
             joinColumns = @JoinColumn(name = "ID_TRANSACAO"),
             inverseJoinColumns = @JoinColumn(name = "ID_CONTA")
     )

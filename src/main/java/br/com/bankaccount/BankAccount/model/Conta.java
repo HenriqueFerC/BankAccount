@@ -64,4 +64,16 @@ public class Conta {
         conta1.setSaldo(valor1);
         conta2.setSaldo(valor2);
     }
+
+    public void depositar(Conta conta,BigDecimal valor){
+        BigDecimal saldoConta = conta.getSaldo();
+        saldoConta = saldoConta.add(valor);
+        this.saldo = saldoConta;
+    }
+
+    public void sacar(Conta conta,BigDecimal valor){
+        BigDecimal saldoConta = conta.getSaldo();
+        saldoConta = saldoConta.subtract(valor);
+        this.saldo = saldoConta;
+    }
 }

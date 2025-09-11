@@ -115,7 +115,7 @@ public class UserController {
 
     @PutMapping("atualizar")
     @Transactional
-    @Operation(summary = "Atualizar Usuário", description = "Atualiza o Usuário com base no ID da URL.")
+    @Operation(summary = "Atualizar Usuário", description = "Atualiza o Usuário logado.")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Usuário atualizado com sucesso!",
                     content = @Content(schema = @Schema(implementation = DetalhesUserDto.class), mediaType = "application/json")),
@@ -149,6 +149,10 @@ public class UserController {
             if (!usuario.getId().equals(id)) {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Você não pode excluir outro usuário!");
             }
+            var conta = usuario.getConta();
+            usuario.setConta(null);
+            conta.setUser(null);
+            contaRepository.save(conta);
             userRepository.delete(usuario);
             return ResponseEntity.noContent().build();
         } catch (EntityNotFoundException e) {

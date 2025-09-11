@@ -41,13 +41,13 @@ public class User implements UserDetails {
     @Column(name = "CPF_CNPJ", length = 18, nullable = false, unique = true)
     private String cpfCnpj;
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Endereco endereco;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Telefone> telefones;
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.DETACH)
+    @OneToOne(mappedBy = "user", cascade = CascadeType.DETACH, fetch = FetchType.EAGER)
     private Conta conta;
 
     public void adicionarTelefone(Telefone telefone) {

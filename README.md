@@ -112,10 +112,22 @@ ______________________________________
 
 * **Requer Token.**
 
+--------------------------------------
+### Sacar valor bancário
+
+`/conta/valor-sacado?valor-sacado=?`
+
+* **Requer Token.**
+--------------------------------------
+### Depositar valor bancário
+
+`/conta/valor-depositado?valor-depositado=?`
+
+* **Requer Token.**
 ______________________________________
 ### Realizar transação entre Contas.
 
-`/conta/realizarTransacao/{idRemetente}/{idDestinatario}`.
+`/conta/realizarTransacao/{idDestinatario}`.
 
 * **Requer Token.**
 

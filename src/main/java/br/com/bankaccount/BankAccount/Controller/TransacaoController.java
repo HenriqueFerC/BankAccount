@@ -59,7 +59,7 @@ public class TransacaoController {
         return ResponseEntity.ok(lista);
     }
 
-    @GetMapping("id")
+    @GetMapping("{id}")
     @Operation(summary = "Buscar Transação por ID", description = "Busca uma transação com base no ID da URL.")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Transação buscada com sucesso!",
